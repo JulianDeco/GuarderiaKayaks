@@ -27,3 +27,17 @@ Además comenzó como proyecto para la materia Programación II del 3er año del
     ```bash
     poetry install
     ```
+
+4. Crear archivo .env y definir la siguientes variables de entorno:
+    ```bash
+    DB_HOST
+    DB_USER
+    DB_PASS
+    DB_PORT
+    DB_NAME
+    ```
+
+5. Inicia el servidor uvicorn:
+    ```bash
+    uvicorn app.main:app --reload
+    ```
