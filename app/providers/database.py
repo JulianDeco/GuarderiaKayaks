@@ -7,25 +7,25 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
-DB_PASS = os.getenv("DB_PASS")
-DB_PORT = os.getenv("DB_PORT")
-DB_NAME = os.getenv("DB_NAME")
 
+class BaseDeDatos():
+    def __init__(self):
+        self.host = os.getenv("DB_HOST")
+        self.user = os.getenv("DB_USER")
+        self.passwd = os.getenv("DB_PASS")
+        self.port = os.getenv("DB_PORT")
+        self.name = os.getenv("DB_NAME")
 
-try:
-    SQLALCHEMY_DATABASE_URL = f'mariadb+mariadbconnector://{DB_HOST}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-    # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
-
-    engine = create_engine(
-        SQLALCHEMY_DATABASE_URL,
-        pool_recycle=3600
+    def iniciar_conexion(self):
+        SQLALCHEMY_DATABASE_URL = f'mariadb+mariadbconnector://{self.host}:{self.passwd}@{self.host}:{self.port}/{self.name}'
+        try:
+            engine = create_engine(
+                SQLALCHEMY_DATABASE_URL,
+                pool_recycle=3600 
+            )
+            SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+            Base = declarative_base()
+            return Base, SessionLocal
+        except Exception as err:
+            print(str(err))
         
-    )
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-    Base = declarative_base()
-except Exception as err:
-    print(str(err))
-    
