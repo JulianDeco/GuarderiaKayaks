@@ -21,14 +21,27 @@ Además comenzó como proyecto para la materia Programación II del 3er año del
     ```bash
     cd GuarderiaKayaks
     ```
-
-3. Instala las dependencias utilizando Poetry:
+    
+3. Accede al directorio del proyecto:
 
     ```bash
+    python -m venv venv
+    ```
+    
+4. Accede al directorio del proyecto:
+
+    ```bash
+    .venv\Scripts\activate
+    ```
+
+5. Instala las dependencias utilizando Poetry:
+
+    ```bash
+    pip install setuptools poetry
     poetry install
     ```
 
-4. Crear archivo .env y definir la siguientes variables de entorno:
+6. Crear archivo .env y definir la siguientes variables de entorno:
     ```bash
     DB_HOST
     DB_USER
@@ -41,3 +54,4 @@ Además comenzó como proyecto para la materia Programación II del 3er año del
     ```bash
     uvicorn app.main:app --reload
     ```
+
