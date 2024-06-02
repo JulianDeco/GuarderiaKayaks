@@ -7,9 +7,10 @@ from app.routes.autenticacion import router as autenticacion
 from app.routes.kayaks import router as kayaks
 from app.routes.clientes import router as clientes
 
-# from app.providers.database import SessionLocal, engine, Base
+from app.providers.database import BaseDeDatos
+from app.models.models import Base, SessionLocal, engine
 
-# from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session
 
 titulo = "SysKayaks"
 descripcion = """
@@ -25,20 +26,20 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-# try:
-#     Base.metadata.create_all(bind=engine)
-# except Exception as err:
-#     print(err.args)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as err:
+    print(err.args)
     
-# def get_db():
+def get_db():
     
-#     try:
-#         db = SessionLocal()
-#         yield db
-#     except Exception as error:
-#         print(error.args)
-#     finally: 
-#         db.close()
+    try:
+        db = SessionLocal()
+        yield db
+    except Exception as error:
+        print(error.args)
+    finally: 
+        db.close()
 
 @app.get("/ping")
 async def pong():

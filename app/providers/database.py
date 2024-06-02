@@ -17,7 +17,8 @@ class BaseDeDatos():
         self.name = os.getenv("DB_NAME")
 
     def iniciar_conexion(self):
-        SQLALCHEMY_DATABASE_URL = f'mariadb+mariadbconnector://{self.host}:{self.passwd}@{self.host}:{self.port}/{self.name}'
+        SQLALCHEMY_DATABASE_URL = f'mariadb+mariadbconnector://{self.user}:{self.passwd}@{self.host}:{self.port}/{self.name}'
+        print(SQLALCHEMY_DATABASE_URL)
         try:
             engine = create_engine(
                 SQLALCHEMY_DATABASE_URL,
@@ -25,7 +26,7 @@ class BaseDeDatos():
             )
             SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
             Base = declarative_base()
-            return Base, SessionLocal
+            return Base, SessionLocal, engine
         except Exception as err:
             print(str(err))
         

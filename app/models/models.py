@@ -1,44 +1,44 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float, DECIMAL
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
 
 from app.providers.database import BaseDeDatos
 import uuid
 
 bbdd = BaseDeDatos()
-Base, SessionLocal = bbdd.iniciar_conexion()
-
-class Roles(Base):
-    __tablename__ = "roles"
-    id = Column(Integer, primary_key=True)
-    descripcion = Column(String)
-
+Base, SessionLocal, engine = bbdd.iniciar_conexion()
 class TipoEmbarcacion(Base):
     __tablename__ = "tipo_embarcaciones"
     id = Column(Integer, primary_key=True)
-    descripcion = Column(String)
-    
-    embarcaciones = relationship("Embarcaciones", back_populates="tipo_embarcacion")  # Relación uno a muchos
+    descripcion = Column(String(250))
+
+    embarcaciones = relationship("Embarcaciones", back_populates="tipo_embarcacion")
 
 class TipoDocumento(Base):
     __tablename__ = "tipo_documento"
     id = Column(Integer, primary_key=True)
-    descripcion = Column(String)
+    descripcion = Column(String(250))
 
-    clientes = relationship("Clientes", back_populates="tipo_documento_rel")  # Relación uno a muchos
-    usuarios_sistema = relationship("UsuarioSistema", back_populates="tipo_documento_rel")  # Relación uno a muchos
+    clientes = relationship("Clientes", back_populates="tipo_documento_rel")
+    usuarios_sistema = relationship("UsuarioSistema", back_populates="tipo_documento_rel")
+
+class Rol(Base):
+    __tablename__ = "roles"
+    id = Column(Integer, primary_key=True)
+    descripcion = Column(String(250))
+
+    usuarios_sistema = relationship("UsuarioSistema", back_populates="rol_rel")
 
 class UsuarioSistema(Base):
     __tablename__ = "usuario_sistema"
   
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    nombre = Column(String)
-    apellido = Column(String)
-    rol = Column(Integer, ForeignKey('roles.id'))  
-    mail = Column(String, unique=True)
-    contraseña = Column(String)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    nombre = Column(String(250))
+    apellido = Column(String(250))
+    rol = Column(Integer, ForeignKey('roles.id'))
+    mail = Column(String(250), unique=True)
+    contraseña = Column(String(250))
     tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
-    nro_documento = Column(String)
+    nro_documento = Column(String(250))
 
     rol_rel = relationship("Rol", back_populates="usuarios_sistema")
     tipo_documento_rel = relationship("TipoDocumento", back_populates="usuarios_sistema")
@@ -46,42 +46,42 @@ class UsuarioSistema(Base):
 class Clientes(Base):
     __tablename__ = "clientes"
 
-    id_cliente = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    nombre = Column(String)
-    apellido = Column(String)
-    mail = Column(String, unique=True, index=True)
-    direccion = Column(String)
+    id_cliente = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    nombre = Column(String(250))
+    apellido = Column(String(250))
+    mail = Column(String(250), unique=True, index=True)
+    direccion = Column(String(250))
     tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
-    nro_documento = Column(String)
+    nro_documento = Column(String(250))
     telefono = Column(Integer)
     
     pagos = relationship("Pagos", back_populates="cliente")
-    embarcaciones = relationship("Embarcaciones", back_populates="cliente")  # Relación uno a muchos
+    embarcaciones = relationship("Embarcaciones", back_populates="cliente")
     tipo_documento_rel = relationship("TipoDocumento", back_populates="clientes")
 
 class Embarcaciones(Base):
     __tablename__ = "embarcaciones"
 
-    id_embarcacion = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id_embarcacion = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     tipo_id = Column(Integer, ForeignKey('tipo_embarcaciones.id'))
-    marca = Column(String)
-    modelo = Column(String)
-    color = Column(String)
+    marca = Column(String(250))
+    modelo = Column(String(250))
+    color = Column(String(250))
     eslora = Column(Integer)
-    manga = Column(Integer) 
+    manga = Column(Integer)
     año_de_ingreso = Column(Date)
     percha = Column(Integer)
-    id_cliente = Column(UUID(as_uuid=True), ForeignKey('clientes.id_cliente'))  # Clave foránea para la relación
+    id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
 
-    cliente = relationship("Clientes", back_populates="embarcaciones")  # Relación muchos a uno
+    cliente = relationship("Clientes", back_populates="embarcaciones")
     tipo_embarcacion = relationship("TipoEmbarcacion", back_populates="embarcaciones")
 
 class Pagos(Base):
     __tablename__ = "pagos"
     
-    id_pago = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    monto = Column(Float)
+    id_pago = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    monto = Column(DECIMAL(10, 2))
     fecha_pago = Column(Date)
-    id_cliente = Column(UUID(as_uuid=True), ForeignKey('clientes.id_cliente'))
+    id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
 
-    cliente = relationship("Clientes", back_populates="pagos")  # Relación muchos a uno
+    cliente = relationship("Clientes", back_populates="pagos")
