@@ -1,74 +1,87 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.providers.database import BaseDeDatos
+import uuid
 
 bbdd = BaseDeDatos()
 Base, SessionLocal = bbdd.iniciar_conexion()
 
-class usuario_sistema(Base):
+class Roles(Base):
+    __tablename__ = "roles"
+    id = Column(Integer, primary_key=True)
+    descripcion = Column(String)
+
+class TipoEmbarcacion(Base):
+    __tablename__ = "tipo_embarcaciones"
+    id = Column(Integer, primary_key=True)
+    descripcion = Column(String)
+    
+    embarcaciones = relationship("Embarcaciones", back_populates="tipo_embarcacion")  # Relación uno a muchos
+
+class TipoDocumento(Base):
+    __tablename__ = "tipo_documento"
+    id = Column(Integer, primary_key=True)
+    descripcion = Column(String)
+
+    clientes = relationship("Clientes", back_populates="tipo_documento_rel")  # Relación uno a muchos
+    usuarios_sistema = relationship("UsuarioSistema", back_populates="tipo_documento_rel")  # Relación uno a muchos
+
+class UsuarioSistema(Base):
     __tablename__ = "usuario_sistema"
   
-    id = Column(Integer, primary_key=True, unique=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     nombre = Column(String)
     apellido = Column(String)
-    rol = Column(String) #no se que tipo de dato puedo ir aca 
-    mail = Column(String)
-    contrseña = Column(String)
-    tipo_documento = Column(String)
-    nro_documento = Column(int)
-    
-class Usuarios(Base): #esta tabla se va a tener que borrar
-    __tablename__ = "usuarios"
+    rol = Column(Integer, ForeignKey('roles.id'))  
+    mail = Column(String, unique=True)
+    contraseña = Column(String)
+    tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
+    nro_documento = Column(String)
 
-    id = Column(Uuid, primary_key=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-
-    clientes_cargados = relationship("clientes", back_populates="id")
+    rol_rel = relationship("Rol", back_populates="usuarios_sistema")
+    tipo_documento_rel = relationship("TipoDocumento", back_populates="usuarios_sistema")
 
 class Clientes(Base):
     __tablename__ = "clientes"
 
-    id_cliente = Column(Uuid, primary_key=True)
+    id_cliente = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     nombre = Column(String)
     apellido = Column(String)
-    mail= Column(String, unique=True, index=True)
+    mail = Column(String, unique=True, index=True)
     direccion = Column(String)
-    tipo_documento = Column(String) 
+    tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
     nro_documento = Column(String)
-    telefono = Column(int)
+    telefono = Column(Integer)
     
-    pagos = relationship("Pagos", back_populates="cliente") # esta relacion em la hizo carlitos(chatgpt)
-    
+    pagos = relationship("Pagos", back_populates="cliente")
+    embarcaciones = relationship("Embarcaciones", back_populates="cliente")  # Relación uno a muchos
+    tipo_documento_rel = relationship("TipoDocumento", back_populates="clientes")
+
 class Embarcaciones(Base):
     __tablename__ = "embarcaciones"
 
-    id_embarcacion = Column(Integer, primary_key=True, unique=True)
-    tipo = Column(String) #creo que poniendo el tipo de embarcacion aca nos ahorramos la tabla tipo_embarcaciones
+    id_embarcacion = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tipo_id = Column(Integer, ForeignKey('tipo_embarcaciones.id'))
     marca = Column(String)
     modelo = Column(String)
     color = Column(String)
-    eslora = Column(int) #creo que va un int 
-    manga = Column(int) #busque y es el ancho de una embarcacion y ya que tenemos el largo ¿porque no el ancho?
+    eslora = Column(Integer)
+    manga = Column(Integer) 
     año_de_ingreso = Column(Date)
-    percha = Column(int) 
+    percha = Column(Integer)
+    id_cliente = Column(UUID(as_uuid=True), ForeignKey('clientes.id_cliente'))  # Clave foránea para la relación
+
+    cliente = relationship("Clientes", back_populates="embarcaciones")  # Relación muchos a uno
+    tipo_embarcacion = relationship("TipoEmbarcacion", back_populates="embarcaciones")
 
 class Pagos(Base):
     __tablename__ = "pagos"
     
-    id_pago = Column(int, primary_key=True, unique=True)
-    monto = Column(float)
+    id_pago = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    monto = Column(Float)
     fecha_pago = Column(Date)
-    id_cliente = Column(int, ForeignKey('id_cliente')) # vas a tener que hacer las relaciones porque no se que onda como hacerlas y
+    id_cliente = Column(UUID(as_uuid=True), ForeignKey('clientes.id_cliente'))
 
-    cliente = relationship("Clientes", back_populates="pagos") # esta relacion em la hizo carlitos(chatgpt)
-     
-    
-class clientes_embarcaciones(Base):
-    __tablename__ = "clientes_embarcaciones"
-    
-    id_cliente = Column(int, ForeignKey('id_cliente'))
-    id_embarcion = Column(int, ForeignKey('id_ embarcacion'))
-    
+    cliente = relationship("Clientes", back_populates="pagos")  # Relación muchos a uno
