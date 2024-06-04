@@ -22,7 +22,7 @@ def get_db():
     finally: 
         db.close()
 
-router = APIRouter(prefix="/clientes")
+router = APIRouter(prefix="/clientes", tags=["Clientes"])
 
 
 @router.post("/nuevo")

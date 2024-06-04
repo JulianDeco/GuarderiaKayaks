@@ -27,25 +27,25 @@ def get_db():
     finally: 
         db.close()
 
-router = APIRouter(prefix="/kayaks")
+router = APIRouter(prefix="/embarcaciones", tags=["Embarcaciones"])
 
 
 @router.post("/")
-async def cargar_kayak(embarcacion: Embarcacion, db: Session = Depends(get_db)):
+async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
     manager = EmbarcacionesManager(db, embarcacion)
     rta = manager.crear()
     return rta
 
 @router.get("/")
-async def listar_kayak(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
+async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
     if id:
         return
     return
 
 @router.delete("/")
-async def eliminar_kayak(id: int, db: Session = Depends(get_db)):
+async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):
     return
 
 @router.put("/")
-async def modificar_kayak(id: int, db: Session = Depends(get_db)):
+async def modificar_embarcacion(id: int, db: Session = Depends(get_db)):
     return

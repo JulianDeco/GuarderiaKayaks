@@ -11,12 +11,42 @@ from app.models.models import Base, SessionLocal, engine
 
 from sqlalchemy.orm import Session
 
-titulo = "SysKayaks"
-descripcion = """
-Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT
-"""
+titulo = "Refugio del Remo"
+descripcion =   """
+    Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT
+                """
+tags_metadata = [
+    {
+        "name": "Embarcaciones",
+        "description": "Endpoints relacionados a embarcaciones.",
+    },
+    {
+        "name": "Clientes",
+        "description": "Endpoints relacionados a clientes.",
+    },
+    {
+        "name": "Autenticación",
+        "description": "Endpoints relacionados a la autenticación y seguridad del sistema." 
+    },
+    
+    # {
+    #     "name": "Conciliacion",
+    #     "description": "Billetera API utiliza este endpoint para obtener los movimientos que la entidad tiene registrado en un rango de fechas dado para conciliar con los movimientos registrados en la base de datos."
+    # },
+    {
+        "name": "Endpoints Billetera",
+        "description": "Endpoints a consumir de billetera.",
+        "externalDocs": {
+            "description" : "Endpoints",
+            "url": " https://{URL_BASE}/AvisoMovimientoEnEntidad.com"
+        },
+    },    
+]
 
-app = FastAPI(title = titulo, description=descripcion)
+
+app = FastAPI(title = titulo, 
+              description=descripcion , 
+              openapi_tags=tags_metadata)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

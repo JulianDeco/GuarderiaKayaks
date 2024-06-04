@@ -22,7 +22,7 @@ def get_db():
     finally: 
         db.close()
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 @router.post("/login")
 async def login():
