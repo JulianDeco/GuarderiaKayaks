@@ -28,11 +28,6 @@ tags_metadata = [
         "name": "Autenticación",
         "description": "Endpoints relacionados a la autenticación y seguridad del sistema." 
     },
-    
-    # {
-    #     "name": "Conciliacion",
-    #     "description": "Billetera API utiliza este endpoint para obtener los movimientos que la entidad tiene registrado en un rango de fechas dado para conciliar con los movimientos registrados en la base de datos."
-    # },
     {
         "name": "Endpoints Billetera",
         "description": "Endpoints a consumir de billetera.",
