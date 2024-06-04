@@ -4,10 +4,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app.routes.autenticacion import router as autenticacion
-from app.routes.kayaks import router as kayaks
+from app.routes.embarcaciones import router as embarcaciones
 from app.routes.clientes import router as clientes
 
-from app.providers.database import BaseDeDatos
 from app.models.models import Base, SessionLocal, engine
 
 from sqlalchemy.orm import Session
@@ -53,5 +52,5 @@ async def read_item(request: Request, id: str):
 
 
 app.include_router(autenticacion)
-app.include_router(kayaks)
+app.include_router(embarcaciones)
 app.include_router(clientes)

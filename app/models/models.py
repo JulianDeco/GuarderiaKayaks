@@ -68,9 +68,7 @@ class Embarcaciones(Base):
     marca = Column(String(250))
     modelo = Column(String(250))
     color = Column(String(250))
-    eslora = Column(Integer)
-    manga = Column(Integer)
-    año_de_ingreso = Column(Date)
+    año_ingreso = Column(Date)
     percha = Column(Integer)
     id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
 
@@ -98,3 +96,7 @@ class Mails(Base):
     
     cliente = relationship("Clientes", back_populates="id_cliente")
     
+class CantidadPerchas(Base):
+    __tablename__="cantidad_perchas"
+    id = Column(Integer, primary_key=True)
+    cantidad = Column(Integer)
