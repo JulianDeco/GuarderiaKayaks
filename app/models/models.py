@@ -58,6 +58,7 @@ class Clientes(Base):
     pagos = relationship("Pagos", back_populates="cliente")
     embarcaciones = relationship("Embarcaciones", back_populates="cliente")
     tipo_documento_rel = relationship("TipoDocumento", back_populates="clientes")
+    mails = relationship("Mails", back_populates="cliente")
 
 class Embarcaciones(Base):
     __tablename__ = "embarcaciones"
@@ -85,3 +86,15 @@ class Pagos(Base):
     id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
 
     cliente = relationship("Clientes", back_populates="pagos")
+    
+class Mails(Base):
+    __tablename__ = "mails"
+    id_pago = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    mensaje = Column(String(400))
+    titulo = Column(String(200))
+    receptor_cliente = Column(String(400), ForeignKey('clientes.id_cliente'))
+    receptor_mail = (String(400))
+    fecha_pago = Column(Date)
+    
+    cliente = relationship("Clientes", back_populates="id_cliente")
+    
