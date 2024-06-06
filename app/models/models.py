@@ -94,7 +94,7 @@ class Mails(Base):
     receptor_mail = (String(400))
     fecha_pago = Column(Date)
     
-    cliente = relationship("Clientes", back_populates="id_cliente")
+    cliente = relationship("Clientes", back_populates="mails")
     
 class CantidadPerchas(Base):
     __tablename__="cantidad_perchas"

@@ -40,7 +40,10 @@ async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get
 async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
     if id:
         return
-    return
+    consulta = EmbarcacionesManager(db)
+    consulta = consulta.obtener_todos()
+    for c in consulta:
+        return c.marca 
 
 @router.delete("/")
 async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):
