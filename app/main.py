@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, BackgroundTasks, Response
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,6 +13,8 @@ from app.security.config_jwt import JWTBearer
 
 from sqlalchemy.orm import Session
 
+import logging
+from pathlib import Path
 #127.0.0.1/docs
 
 titulo = "Refugio del Remo"
@@ -50,6 +52,27 @@ app = FastAPI(title = titulo,
               description=descripcion , 
               openapi_tags=tags_metadata)
 
+logger = logging.getLogger(f'{__name__}')
+
+config_path=Path(__file__).with_name("logging_config.json")
+
+
+def log_info(req_body, res_body):
+    logging.info(req_body)
+    logging.info(res_body)
+
+@app.middleware('http')
+async def some_middleware(request: Request, call_next):
+    req_body = await request.body()
+    response = await call_next(request)
+    
+    res_body = b''
+    async for chunk in response.body_iterator:
+        res_body += chunk
+    
+    task = BackgroundTasks(log_info, req_body, res_body)
+    return Response(content=res_body, status_code=response.status_code, 
+        headers=dict(response.headers), media_type=response.media_type, background=task)
 
 
 try:

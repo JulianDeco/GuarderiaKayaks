@@ -9,8 +9,6 @@ import logging
 
 logger = logging.getLogger(f'{__name__}')
 
-security = HTTPBasic(description="Credenciales necesarias para obtener el token")
-
 try:
     Base.metadata.create_all(bind=engine)
 except Exception as err:
@@ -26,7 +24,7 @@ def get_db():
     finally: 
         db.close()
 
-router = APIRouter(prefix="/auth", tags=["Autenticación"], dependencies= [Depends(security)])
+router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 @router.post("/login")
 async def login():
