@@ -47,14 +47,6 @@ class EmbarcacionesManager(ManagerGral):
     
     def crear(self):
         """Crear una embarcación"""
-        embarcacion = Embarcaciones(
-        id_embarcacion = '',
-        tipo_embarcacion = '',
-        
-        
-        )
-        self.instancia_db.add(embarcacion)
-        self.instancia_db.commit()
         pass
     
     def eliminar(self, id=int):
