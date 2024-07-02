@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request, Depends, BackgroundTasks, Response
+from fastapi import FastAPI, Request, Depends, Response
+from starlette.background import BackgroundTask
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -10,6 +11,8 @@ from app.routes.clientes import router as clientes
 from app.models.models import Base, SessionLocal, engine
 
 from app.security.config_jwt import JWTBearer
+
+from app.custom_logging import CustomizeLogger
 
 from sqlalchemy.orm import Session
 
@@ -35,15 +38,7 @@ tags_metadata = [
     {
         "name": "Pagos",
         "description": "Endpoints relacionados a los pagos." 
-    },
-    {
-        "name": "Endpoints Billetera",
-        "description": "Endpoints a consumir de billetera.",
-        "externalDocs": {
-            "description" : "Endpoints",
-            "url": " https://{URL_BASE}/AvisoMovimientoEnEntidad.com"
-        },
-    },    
+    }
 ]
 
 security = JWTBearer()
@@ -55,7 +50,8 @@ app = FastAPI(title = titulo,
 logger = logging.getLogger(f'{__name__}')
 
 config_path=Path(__file__).with_name("logging_config.json")
-
+logger = CustomizeLogger.make_logger(config_path)
+print(config_path)
 
 def log_info(req_body, res_body):
     logging.info(req_body)
@@ -65,12 +61,12 @@ def log_info(req_body, res_body):
 async def some_middleware(request: Request, call_next):
     req_body = await request.body()
     response = await call_next(request)
-    
+    logging.info(request.headers)
     res_body = b''
     async for chunk in response.body_iterator:
         res_body += chunk
     
-    task = BackgroundTasks(log_info, req_body, res_body)
+    task = BackgroundTask(log_info, req_body, res_body)
     return Response(content=res_body, status_code=response.status_code, 
         headers=dict(response.headers), media_type=response.media_type, background=task)
 

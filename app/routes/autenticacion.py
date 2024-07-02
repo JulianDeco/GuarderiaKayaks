@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
-from fastapi.security import HTTPBasic
+from fastapi.security import HTTPBasic, HTTPAuthorizationCredentials
 
 from app.models.models import Base, SessionLocal, engine
 
 from sqlalchemy.orm import Session
 
+from typing import Annotated
 import logging
 
 logger = logging.getLogger(f'{__name__}')
@@ -26,9 +27,11 @@ def get_db():
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
+security = HTTPBasic()
+
 @router.post("/login")
-async def login():
-    return
+async def login(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
+    return {"username": credentials.username, "password": credentials.password}
 
 
 # @router.post("/register")

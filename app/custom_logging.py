@@ -48,7 +48,6 @@ class CustomizeLogger:
             rotation=logging_config.get('rotation'),
             format=logging_config.get('format')
         )
-        # logger.add('app/logs/logs.log', rotation="1 day")
         return logger
 
     @classmethod
