@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.models.models_swagger import Embarcacion
+from app.schemes.schemes import Embarcacion
 from app.providers.consultas import EmbarcacionesManager
 from app.models.models import Base, SessionLocal, engine
 
@@ -39,11 +39,24 @@ async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get
 @router.get("/")
 async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
     if id:
-        return
+        try:
+            consulta = EmbarcacionesManager(db)
+            consulta = consulta.obtener_uno(id)
+            lista_embarcaciones = []
+            if not consulta:
+                return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
+            for embarcacion in consulta:
+                lista_embarcaciones.append({
+                    'id': embarcacion.id_embarcacion,
+                    'modelo':embarcacion.modelo,
+                    'color': embarcacion.color
+                })
+            return JSONResponse(content={"objeto": lista_embarcaciones})
+        except Exception as error:
+            return JSONResponse(content={"error": error.args}, status_code=404)
     consulta = EmbarcacionesManager(db)
     consulta = consulta.obtener_todos()
-    for c in consulta:
-        return c.marca 
+    return JSONResponse(content={"objeto": consulta})
 
 @router.delete("/")
 async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):

@@ -1,11 +1,15 @@
 from fastapi import APIRouter, Depends
+from fastapi.security import HTTPBasic
 
 from app.models.models import Base, SessionLocal, engine
 
 from sqlalchemy.orm import Session
 
 import logging
+
 logger = logging.getLogger(f'{__name__}')
+
+security = HTTPBasic(description="Credenciales necesarias para obtener el token")
 
 try:
     Base.metadata.create_all(bind=engine)
@@ -22,7 +26,7 @@ def get_db():
     finally: 
         db.close()
 
-router = APIRouter(prefix="/auth", tags=["Autenticación"])
+router = APIRouter(prefix="/auth", tags=["Autenticación"], dependencies= [Depends(security)])
 
 @router.post("/login")
 async def login():

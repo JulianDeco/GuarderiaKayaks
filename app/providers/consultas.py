@@ -3,6 +3,13 @@ from typing import Optional
 
 from app.models.models import Embarcaciones
 
+"""
+Falta agregar
+- Clientes
+- usuarios_sistema
+-      
+"""
+
 
 class ManagerGral(ABC):
     def __init__(self, instancia_db, objeto: Optional[object]):
@@ -42,11 +49,21 @@ class EmbarcacionesManager(ManagerGral):
     
     def crear(self):
         """Crear una embarcación"""
+        embarcacion = Embarcaciones(
+        id_embarcacion = '',
+        tipo_embarcacion = '',
+        
+        
+        )
+        self.instancia_db.add(embarcacion)
+        self.instancia_db.commit()
         pass
     
-    def eliminar(self):
+    def eliminar(self, id):
         """Eliminar una embarcación"""
-        pass
+        eliminar = self.instancia_db.query(self.tipo).filter(self.tipo.id == id).delete()
+        self.instancia_db.commit()
+        return eliminar
     
     def modificar(self):
         """Modificar una embarcación"""
@@ -54,7 +71,7 @@ class EmbarcacionesManager(ManagerGral):
     
     def obtener_uno(self, id):
         """Obtener una embarcación por su ID"""
-        pass
+        return self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion == id).first()
     
     def obtener_todos(self):
         """Obtener todas las embarcaciones"""
@@ -76,3 +93,7 @@ class MailsManager(ManagerGral):
     
     def enviar_mail(self):
         pass
+    
+    
+if __name__ == '__main__':
+    pass

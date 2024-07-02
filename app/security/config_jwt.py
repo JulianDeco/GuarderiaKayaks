@@ -1,11 +1,23 @@
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
+from typing import Dict, Optional
+from typing_extensions import Annotated, Doc
+
 from app.security.handler_jwt import decodeJWT
 
 
 class JWTBearer(HTTPBearer):
-    def __init__(self, auto_error: bool = True):
+    def __init__(self, description: Annotated[
+            Optional[str],
+            Doc(
+                """
+                Security scheme description.
+
+                HTTPBearer (_type_): token obtenido luego de la autenticación
+                """
+            ),
+        ] = None,auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
     async def __call__(self, request: Request):

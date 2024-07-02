@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -9,12 +9,14 @@ from app.routes.clientes import router as clientes
 
 from app.models.models import Base, SessionLocal, engine
 
+from app.security.config_jwt import JWTBearer
+
 from sqlalchemy.orm import Session
 
+#127.0.0.1/docs
+
 titulo = "Refugio del Remo"
-descripcion =   """
-    Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT
-                """
+descripcion =   "Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT"
 tags_metadata = [
     {
         "name": "Embarcaciones",
@@ -29,6 +31,10 @@ tags_metadata = [
         "description": "Endpoints relacionados a la autenticación y seguridad del sistema." 
     },
     {
+        "name": "Pagos",
+        "description": "Endpoints relacionados a los pagos." 
+    },
+    {
         "name": "Endpoints Billetera",
         "description": "Endpoints a consumir de billetera.",
         "externalDocs": {
@@ -38,15 +44,11 @@ tags_metadata = [
     },    
 ]
 
+security = JWTBearer()
 
 app = FastAPI(title = titulo, 
               description=descripcion , 
               openapi_tags=tags_metadata)
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-templates = Jinja2Templates(directory="templates")
 
 
 
@@ -69,13 +71,7 @@ def get_db():
 async def pong():
     return {"estado":"pong"}
 
-@app.get("/items/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: str):
-    return templates.TemplateResponse(
-        request=request, name="item.html", context={"id": id}
-    )
-
 
 app.include_router(autenticacion)
-app.include_router(embarcaciones)
-app.include_router(clientes)
+app.include_router(embarcaciones, dependencies= [Depends(security)])
+app.include_router(clientes, dependencies= [Depends(security)])
