@@ -73,7 +73,7 @@ class EmbarcacionesManager(ManagerGral):
     
     def obtener_uno(self, id=int):
         """Obtener una embarcación por su ID"""
-        return self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion== id).fist()
+        return self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion== id).first()
     
     def obtener_todos(self):
         """Obtener todas las embarcaciones"""

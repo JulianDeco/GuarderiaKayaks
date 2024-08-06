@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 from typing import Annotated
 import logging
 
+from app.security.handler_jwt import signJWT
+
 logger = logging.getLogger(f'{__name__}')
 
 try:
@@ -31,7 +33,8 @@ security = HTTPBasic()
 
 @router.post("/login")
 async def login(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
-    return {"username": credentials.username, "password": credentials.password}
+    signJWT(2, 'admin')
+    return signJWT(2, 'admin')
 
 
 # @router.post("/register")

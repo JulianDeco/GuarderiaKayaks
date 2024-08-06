@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from app.middlewares.middleware import RateLimitingMiddleware
 from app.routes.autenticacion import router as autenticacion
 from app.routes.embarcaciones import router as embarcaciones
 from app.routes.clientes import router as clientes
@@ -69,7 +70,6 @@ async def some_middleware(request: Request, call_next):
     task = BackgroundTask(log_info, req_body, res_body)
     return Response(content=res_body, status_code=response.status_code, 
         headers=dict(response.headers), media_type=response.media_type, background=task)
-
 
 try:
     Base.metadata.create_all(bind=engine)
