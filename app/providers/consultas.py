@@ -50,7 +50,7 @@ class EmbarcacionesManager(ManagerGral):
         pass
     
     def eliminar(self, id=int):
-        """Eliminar una embarcación"""
+        """Eliminar una embarcación, en realidad es una baja lógica y no eliminación real"""
         eliminar_embacaion = self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion == id).delete()
         self.instancia_db.commit()
         return eliminar_embacaion

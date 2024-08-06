@@ -1,5 +1,6 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float, DECIMAL
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float, DECIMAL, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from app.providers.database import BaseDeDatos
 import uuid
@@ -54,6 +55,9 @@ class Clientes(Base):
     tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
     nro_documento = Column(String(250))
     telefono = Column(Integer)
+    fecha_alta_cliente = Column(DateTime, server_default=func.now())
+    fecha_baja_cliente = Column(DateTime, default=None)
+    habilitado = Column(Integer, default= 1)
     
     pagos = relationship("Pagos", back_populates="cliente")
     embarcaciones = relationship("Embarcaciones", back_populates="cliente")
@@ -68,9 +72,11 @@ class Embarcaciones(Base):
     marca = Column(String(250))
     modelo = Column(String(250))
     color = Column(String(250))
-    año_ingreso = Column(Date)
+    fecha_ingreso = Column(DateTime, server_default=func.now())
+    fecha_baja = Column(DateTime, default=None)
     percha = Column(Integer)
     id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
+    habilitado = Column(Integer, default= 1)
 
     cliente = relationship("Clientes", back_populates="embarcaciones")
     tipo_embarcacion = relationship("TipoEmbarcacion", back_populates="embarcaciones")
@@ -80,7 +86,8 @@ class Pagos(Base):
     
     id_pago = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     monto = Column(DECIMAL(10, 2))
-    fecha_pago = Column(Date)
+    fecha_pago = Column(DateTime, server_default=func.now())
+    fecha_pago_realizado = Column(DateTime, default=None)
     id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
 
     cliente = relationship("Clientes", back_populates="pagos")
@@ -92,7 +99,8 @@ class Mails(Base):
     titulo = Column(String(200))
     receptor_cliente = Column(String(400), ForeignKey('clientes.id_cliente'))
     receptor_mail = (String(400))
-    fecha_pago = Column(Date)
+    fecha_creacion = Column(DateTime, server_default=func.now())
+    fecha_entrega = Column(DateTime, default=None)
     
     cliente = relationship("Clientes", back_populates="mails")
     
