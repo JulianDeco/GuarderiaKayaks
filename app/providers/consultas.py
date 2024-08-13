@@ -105,7 +105,8 @@ class PagosManager(ManagerGral):
         self.instancia_db = instancia_db
         self.pagos = Pagos
         
-    def crear
+    def crear():
+        pass
     
     def obtener_uno(self, id = int):
         return self.instancia_db.query(self.pagos).filter(self.pagos.id_pago == id).first()
