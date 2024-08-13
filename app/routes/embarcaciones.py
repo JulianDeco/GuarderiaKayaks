@@ -63,5 +63,5 @@ async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):
     return
 
 @router.put("/")
-async def modificar_embarcacion(id: int, db: Session = Depends(get_db)):
+async def modificar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
     return

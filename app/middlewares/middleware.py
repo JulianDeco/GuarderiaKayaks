@@ -38,10 +38,7 @@ class RateLimitingMiddleware(BaseHTTPMiddleware):
                     content={"message": "Rate limit exceeded. Please try again later."}
                 )
             request_count += 1
-
-        # Update the request count and last request timestamp for the IP
         self.request_counts[client_ip] = (request_count, datetime.now())
 
-        # Proceed with the request
         response = await call_next(request)
         return response

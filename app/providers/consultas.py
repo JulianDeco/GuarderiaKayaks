@@ -41,8 +41,8 @@ class ManagerGral(ABC):
 
 
 class EmbarcacionesManager(ManagerGral):
-    def __init__(self, instancia_db, objeto=None):
-        super().__init__(instancia_db, objeto)
+    def __init__(self, instancia_db):
+        super().__init__(instancia_db)
         self.tipo = Embarcaciones  # Asegúrate de definir Embarcaciones
     
     def crear(self):
@@ -56,16 +56,16 @@ class EmbarcacionesManager(ManagerGral):
         return eliminar_embacaion
         
     
-    def modificar(self, id = int, marca = str, modelo = str, color= str, año_ingreso = None, percha = int, id_cliente = int):
+    def modificar(self, objeto):
+        
         """Modificar una embarcación"""
         modificar_embarcacion = self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion == id).update(
             {
-                self.tipo.marca: marca,
-                self.tipo.modelo: modelo,
-                self.tipo.color: color,
-                self.tipo.año_ingreso: año_ingreso,#no se que hiria aca,
-                self.tipo.percha: percha,
-                self.tipo.id_cliente: id_cliente
+                self.tipo.marca: objeto.marca,
+                self.tipo.modelo: objeto.modelo,
+                self.tipo.color: objeto.color,
+                self.tipo.percha: objeto.percha,
+                self.tipo.id_cliente: objeto.id_cliente
             }
         )
         self.instancia_db.commit()
@@ -80,8 +80,8 @@ class EmbarcacionesManager(ManagerGral):
         return self.instancia_db.query(self.tipo).all()
     
 class MailsManager(ManagerGral):
-    def __init__(self, instancia_db, objeto):
-        super().__init__(instancia_db, objeto)
+    def __init__(self, instancia_db):
+        super().__init__(instancia_db)
         self.instancia_db = instancia_db
         self.mail =  Mails
 
@@ -100,10 +100,12 @@ class MailsManager(ManagerGral):
     
     
 class PagosManager(ManagerGral):
-    def __init__(self, instancia_db, objeto: object | None):
-        super().__init__(instancia_db, objeto)
+    def __init__(self, instancia_db):
+        super().__init__(instancia_db)
         self.instancia_db = instancia_db
         self.pagos = Pagos
+        
+    def crear
     
     def obtener_uno(self, id = int):
         return self.instancia_db.query(self.pagos).filter(self.pagos.id_pago == id).first()
