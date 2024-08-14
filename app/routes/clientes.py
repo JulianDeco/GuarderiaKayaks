@@ -11,7 +11,7 @@ try:
     Base.metadata.create_all(bind=engine)
 except Exception as err:
     logger.error(err)
-    
+     
 def get_db():
     
     try:
