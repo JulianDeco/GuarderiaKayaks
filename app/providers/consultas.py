@@ -137,3 +137,8 @@ class ClientesManager(ManagerGral):
     
     def obtener_todos(self):
         return self.instancia_db.query(self.clientes).all()
+    
+    def baja_cliente(self, cliente: Clientes):
+        cliente.habilitado = 0
+        return self.instancia_db.commit()
+        

@@ -52,7 +52,7 @@ async def listar_clientes(id: Optional[int], db: Session = Depends(get_db)):
                 "telefono": res_cliente.telefono
             })
         return JSONResponse(
-            content=lista_res,
+            content=lista_res ,
             status_code= 200
         )
     res_cliente = consulta_cliente.obtener_uno()
@@ -65,6 +65,18 @@ async def listar_clientes(id: Optional[int], db: Session = Depends(get_db)):
                 "direccion": res_cliente.direccion,
                 "nro_documento": res_cliente.nro_documento,
                 "telefono": res_cliente.telefono
+            },
+        status_code= 200
+    )
+
+@router.delete("/baja")
+async def baja_cliente(ob_cliente: Cliente, db: Session = Depends(get_db)):
+    consulta_cliente = ClientesManager(db)
+    res_cliente =consulta_cliente.obtener_uno(ob_cliente)
+    consulta_cliente.baja_cliente(res_cliente[0])
+    return JSONResponse(
+        content= {
+                "estado": "ok"
             },
         status_code= 200
     )
