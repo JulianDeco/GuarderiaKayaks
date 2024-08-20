@@ -15,12 +15,13 @@ class Login(BaseModel):
         }
 
 class Cliente(BaseModel):
-    id: UUID4 = Field(default_factory=uuid4)
     nombre: str
+    apellido: str
     email: str
     direccion: str
-    tipo_documento: int
+    tipo_documento_id: int
     nro_documento: str
+    telefono: str
 
     class Config:
         json_schema_extra = {

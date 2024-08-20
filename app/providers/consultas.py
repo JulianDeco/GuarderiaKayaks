@@ -2,11 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 
-from app.models.models import Embarcaciones
-from app.models.models import Mails
-from app.models.models import Pagos
-
-
+from app.models.models import Embarcaciones, Mails, Pagos, Clientes
+from app.schemes.schemes import Cliente
 
 
 class ManagerGral(ABC):
@@ -113,3 +110,30 @@ class PagosManager(ManagerGral):
     
     def obtener_todos(self):
         return self.instancia_db.query(self.pagos).all()
+    
+class ClientesManager(ManagerGral):
+    def __init__(self, instancia_db):
+        super().__init__(instancia_db)
+        self.instancia_db = instancia_db
+        self.clientes = Clientes
+        
+    def crear(self, obj_cliente: Cliente):
+        cliente_nuevo = Clientes(
+            nombre = obj_cliente.nombre,
+            apellido = obj_cliente.apellido,
+            mail = obj_cliente.email,
+            direccion = obj_cliente.direccion,
+            tipo_documento_id = obj_cliente.tipo_documento_id,
+            nro_documento = obj_cliente.nro_documento,
+            telefono = obj_cliente.telefono ,
+        
+        )
+        self.instancia_db.add(cliente_nuevo)
+        self.instancia_db.commit()
+        pass
+    
+    def obtener_uno(self, id = int):
+        return self.instancia_db.query(self.clientes).filter(self.clientes.id_cliente == id).first()
+    
+    def obtener_todos(self):
+        return self.instancia_db.query(self.clientes).all()
