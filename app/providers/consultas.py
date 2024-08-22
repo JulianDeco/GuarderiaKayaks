@@ -3,13 +3,15 @@ from typing import Optional
 
 
 from app.models.models import Embarcaciones, Mails, Pagos, Clientes
-from app.schemes.schemes import Cliente
+from app.schemes.schemes import Cliente, Embarcacion
 
 
 class ManagerGral(ABC):
-    def __init__(self, instancia_db, objeto: Optional[object]):
+    """
+    AAAAAA te asesino amigo
+    """
+    def __init__(self, instancia_db):
         self.instancia_db = instancia_db
-        self.objeto = objeto
     
     @abstractmethod    
     def crear(self):
@@ -40,13 +42,23 @@ class ManagerGral(ABC):
 class EmbarcacionesManager(ManagerGral):
     def __init__(self, instancia_db):
         super().__init__(instancia_db)
-        self.tipo = Embarcaciones  # Asegúrate de definir Embarcaciones
+        self.tipo = Embarcaciones
     
-    def crear(self):
+    def crear(self, embarcacion: Embarcacion):
         """Crear una embarcación"""
+        crear_embarcacion = Embarcaciones(
+            tipo_id = embarcacion.tipo_id,
+            marca = embarcacion.marca,
+            modelo = embarcacion.modelo,
+            color = embarcacion.color,
+            percha = embarcacion.percha,
+            id_cliente = embarcacion.id_cliente
+        )
+        self.instancia_db.add(crear_embarcacion)
+        self.instancia_db.commit()
         pass
     
-    def eliminar(self, id=int):
+    def eliminar(self, id: int):
         """Eliminar una embarcación, en realidad es una baja lógica y no eliminación real"""
         eliminar_embacaion = self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion == id).delete()
         self.instancia_db.commit()
