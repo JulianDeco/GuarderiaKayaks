@@ -3,7 +3,7 @@ from typing import Optional
 
 
 from app.models.models import Embarcaciones, Mails, Pagos, Clientes
-from app.schemes.schemes import Cliente, Embarcacion
+from app.schemes.schemes import Cliente, Embarcacion, Pagos
 
 
 class ManagerGral(ABC):
@@ -114,7 +114,7 @@ class PagosManager(ManagerGral):
         self.instancia_db = instancia_db
         self.pagos = Pagos
         
-    def crear():
+    def crear(self, pagos: pagos):
         pass
     
     def obtener_uno(self, id = int):

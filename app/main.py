@@ -39,14 +39,15 @@ tags_metadata = [
     {
         "name": "Pagos",
         "description": "Endpoints relacionados a los pagos." 
-    }
+    },
 ]
 
 security = JWTBearer()
 
 app = FastAPI(title = titulo, 
               description=descripcion , 
-              openapi_tags=tags_metadata)
+              openapi_tags=tags_metadata,
+              )
 
 logger = logging.getLogger(f'{__name__}')
 
@@ -90,7 +91,21 @@ def get_db():
 async def pong():
     return {"estado":"pong"}
 
+responses = {
+    403: {
+        "description": "Not authenticated",
+        "content": {
+            "application/json": {
+                "examples": {
+                    "default": {"summary": "Default", "value": {"detail": "Not authenticated"}},
+                    "invalid_token": {"summary": "Invalid or expired token", "value": {"detail": "Invalid token or expired token."}},
+                    "invalid_scheme": {"summary": "Invalid authentication scheme", "value": {"detail": "Invalid authentication scheme."}},
+                }
+            }
+        }
+    }
+}
 
-app.include_router(autenticacion)
-app.include_router(embarcaciones, dependencies= [Depends(security)])
-app.include_router(clientes, dependencies= [Depends(security)])
+app.include_router(autenticacion, prefix="/v1", responses= responses)
+app.include_router(embarcaciones, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(clientes, dependencies= [Depends(security)], prefix="/v1", responses= responses)

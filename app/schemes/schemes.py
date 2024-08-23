@@ -58,3 +58,6 @@ class Embarcacion(BaseModel):
                 "id_cliente": 123  # Suponiendo que el ID del cliente es un entero
             }
         }
+        
+class Pagos(BaseModel):
+    

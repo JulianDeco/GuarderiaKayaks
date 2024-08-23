@@ -33,7 +33,7 @@ router = APIRouter(prefix="/clientes", tags=["Clientes"])
 async def cargar_cliente(ob_cliente: Cliente, db: Session = Depends(get_db)):
     consulta_cliente = ClientesManager(db)
     consulta_cliente.crear(ob_cliente)
-    return
+    return JSONResponse(content={"estado":"cliente creado"}, status_code=201)
 
 @router.get("/listar")
 async def listar_clientes(id: Optional[int], db: Session = Depends(get_db)):
