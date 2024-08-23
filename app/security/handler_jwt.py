@@ -14,7 +14,8 @@ JWT_ALGORITHM = os.getenv("algorithm")
 
 def token_response(token: str):
     return {
-        "access_token": token
+        "access_token": token,
+        "token_type": "bearer"
     }
 
 def signJWT(user_id: str, rol: str) -> Dict[str, str]:

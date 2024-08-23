@@ -38,9 +38,9 @@ async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get
 
 @router.get("/")
 async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
+    consulta = EmbarcacionesManager(db)
     if id:
         try:
-            consulta = EmbarcacionesManager(db)
             consulta = consulta.obtener_uno(id)
             lista_embarcaciones = []
             if not consulta:
@@ -51,12 +51,11 @@ async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get
                     'modelo':embarcacion.modelo,
                     'color': embarcacion.color
                 })
-            return JSONResponse(content={"objeto": lista_embarcaciones})
+            return JSONResponse(content={"resultado": lista_embarcaciones})
         except Exception as error:
             return JSONResponse(content={"error": error.args}, status_code=404)
-    consulta = EmbarcacionesManager(db)
     consulta = consulta.obtener_todos()
-    return JSONResponse(content={"objeto": consulta})
+    return JSONResponse(content={"resultado": consulta})
 
 @router.delete("/")
 async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):

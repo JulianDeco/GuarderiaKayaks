@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from fastapi.security import HTTPBasic, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBasic, HTTPAuthorizationCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from app.models.models import Base, SessionLocal, engine
 
@@ -29,11 +29,11 @@ def get_db():
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
-security = HTTPBasic()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/auth/login")
 
 @router.post("/login")
-async def login(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
-    signJWT(2, 'admin')
+async def login(credentials: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    print(credentials.username)
     return signJWT(2, 'admin')
 
 

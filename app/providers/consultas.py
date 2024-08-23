@@ -7,9 +7,8 @@ from app.schemes.schemes import Cliente
 
 
 class ManagerGral(ABC):
-    def __init__(self, instancia_db, objeto: Optional[object]):
+    def __init__(self, instancia_db):
         self.instancia_db = instancia_db
-        self.objeto = objeto
     
     @abstractmethod    
     def crear(self):
