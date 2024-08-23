@@ -27,11 +27,13 @@ class Cliente(BaseModel):
         json_schema_extra = {
             "example": {
                 "id": str(uuid4()),
-                "nombre": "Juan Pérez",
+                "nombre": "Juan",
                 "email": "juan.perez@example.com",
                 "direccion": "Calle Falsa 123, Ciudad, País",
                 "tipo_documento": 1,  # Ejemplo: 1 para DNI, 2 para Pasaporte, etc.
-                "nro_documento": "12345678"
+                "nro_documento": "12345678",
+                "apellido":"Pérez",
+                "telefono":"3416109098"
             }
         }
 
