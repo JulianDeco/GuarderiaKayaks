@@ -125,11 +125,10 @@ class ClientesManager(ManagerGral):
             tipo_documento_id = obj_cliente.tipo_documento_id,
             nro_documento = obj_cliente.nro_documento,
             telefono = obj_cliente.telefono ,
-        
         )
         self.instancia_db.add(cliente_nuevo)
         self.instancia_db.commit()
-        pass
+        return
     
     def obtener_uno(self, id = int):
         return self.instancia_db.query(self.clientes).filter(self.clientes.id_cliente == id).first()
@@ -137,7 +136,10 @@ class ClientesManager(ManagerGral):
     def obtener_todos(self):
         return self.instancia_db.query(self.clientes).all()
     
-    def baja_cliente(self, cliente: Clientes):
+    def eliminar(self, cliente: Clientes):
         cliente.habilitado = 0
         return self.instancia_db.commit()
+    
+    def modificar(self):
+        return
         
