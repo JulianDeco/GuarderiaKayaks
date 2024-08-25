@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.schemes.schemes import Embarcacion
+from app.schemes.schemes import Embarcacion, Pagos  
 from app.providers.consultas import EmbarcacionesManager, PagosManager
 from app.models.models import Base, SessionLocal, engine
 

@@ -59,5 +59,16 @@ class Embarcacion(BaseModel):
             }
         }
         
-class Pagos(BaseModel):
+class Pago(BaseModel):
+    monto: float
+    id_cliente: int
     
+    class config:
+        json_schema_extra = {
+            "example":{
+                "id_pago": str(uuid4()),
+                "monto": 2000,
+                "fecha_pago": datetime.date(2024,1,1).isoformat(),
+                "id_cliente": 1
+            }
+        }
