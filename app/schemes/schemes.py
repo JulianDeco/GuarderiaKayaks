@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, UUID4, Field
 from uuid import uuid4
 import datetime
@@ -17,7 +18,7 @@ class Login(BaseModel):
 class Cliente(BaseModel):
     nombre: str
     apellido: str
-    email: str
+    mail: str
     direccion: str
     tipo_documento_id: int
     nro_documento: str
@@ -26,12 +27,37 @@ class Cliente(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "id": str(uuid4()),
-                "nombre": "Juan Pérez",
-                "email": "juan.perez@example.com",
+                "nombre": "Juan",
+                "apellido": "Perez",
+                "mail": "juan.perez@example.com",
                 "direccion": "Calle Falsa 123, Ciudad, País",
-                "tipo_documento": 1,  # Ejemplo: 1 para DNI, 2 para Pasaporte, etc.
-                "nro_documento": "12345678"
+                "tipo_documento_id": 1,  # Ejemplo: 1 para DNI, 2 para Pasaporte, etc.
+                "nro_documento": "12345678",
+                "telefono": "3411111111"
+            }
+        }
+        
+class ClienteModificacion(BaseModel):
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    mail: Optional[str] = None
+    direccion: Optional[str] = None
+    tipo_documento_id: Optional[int] = None
+    nro_documento: Optional[str] = None
+    telefono: Optional[str] = None
+    habilitado: Optional[int] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "nombre": "Juan",
+                "apellido": "Perez",
+                "mail": "juan.perez@example.com",
+                "direccion": "Calle Falsa 123, Ciudad, País",
+                "tipo_documento_id": 1,  # Ejemplo: 1 para DNI, 2 para Pasaporte, etc.
+                "nro_documento": "12345678",
+                "telefono": "3411111111",
+                "habilitado": 1
             }
         }
 

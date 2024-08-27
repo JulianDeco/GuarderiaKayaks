@@ -54,7 +54,7 @@ class Clientes(Base):
     direccion = Column(String(250))
     tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
     nro_documento = Column(String(250))
-    telefono = Column(Integer)
+    telefono = Column(String(20))
     fecha_alta_cliente = Column(DateTime, server_default=func.now())
     fecha_baja_cliente = Column(DateTime, default=None)
     habilitado = Column(Integer, default= 1)

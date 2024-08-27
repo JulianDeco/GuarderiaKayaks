@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
+import datetime
 from typing import Optional
+
+from fastapi import HTTPException
 
 
 from app.models.models import Embarcaciones, Mails, Pagos, Clientes
-from app.schemes.schemes import Cliente, Embarcacion, Pago
+from app.schemes.schemes import Cliente, Embarcacion, Pago, ClienteModificacion
 
 
 class ManagerGral(ABC):
@@ -139,7 +142,7 @@ class ClientesManager(ManagerGral):
         cliente_nuevo = Clientes(
             nombre = obj_cliente.nombre,
             apellido = obj_cliente.apellido,
-            mail = obj_cliente.email,
+            mail = obj_cliente.mail,
             direccion = obj_cliente.direccion,
             tipo_documento_id = obj_cliente.tipo_documento_id,
             nro_documento = obj_cliente.nro_documento,
@@ -156,7 +159,15 @@ class ClientesManager(ManagerGral):
     def obtener_todos(self):
         return self.instancia_db.query(self.clientes).all()
     
-    def baja_cliente(self, cliente: Clientes):
-        cliente.habilitado = 0
-        return self.instancia_db.commit()
+    def eliminar(self, cliente_id):
+        busqueda_cliente = self.obtener_uno(cliente_id)
+        if busqueda_cliente:
+            busqueda_cliente.fecha_baja_cliente = datetime.datetime.now()
+            busqueda_cliente.habilitado = 0
+            self.instancia_db.commit()
+            return
+        raise HTTPException(content={"detalle":"cliente no encontrado"}, status_code=404)
         
+    def modificar(self, cliente: ClienteModificacion, id_cliente):
+        self.instancia_db.query(self.clientes).filter(self.clientes.id_cliente == id_cliente).update(cliente.model_dump())
+        self.instancia_db.commit()
