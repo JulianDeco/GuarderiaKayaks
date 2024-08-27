@@ -8,6 +8,7 @@ from app.middlewares.middleware import RateLimitingMiddleware
 from app.routes.autenticacion import router as autenticacion
 from app.routes.embarcaciones import router as embarcaciones
 from app.routes.clientes import router as clientes
+from app.routes.pagos import router as pagos
 
 from app.models.models import Base, SessionLocal, engine
 
@@ -109,3 +110,4 @@ responses = {
 app.include_router(autenticacion, prefix="/v1", responses= responses)
 app.include_router(embarcaciones, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(clientes, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(pagos, dependencies= [Depends(security)], prefix="/v1", responses= responses)
