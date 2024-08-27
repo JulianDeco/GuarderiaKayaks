@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.schemes.schemes import Embarcacion, Pagos  
+from app.schemes.schemes import Embarcacion, Pago
 from app.providers.consultas import EmbarcacionesManager, PagosManager
 from app.models.models import Base, SessionLocal, engine
 
@@ -31,7 +31,28 @@ router = APIRouter(prefix="/pagos", tags=["Pagos"])
 
 
 @router.post("/")
-async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
-    manager = PagosManager(db)
+async def crear_pagos(pagos: Pago, db: Session = Depends(get_db)):
+    manager = PagosManager(db, pagos)
     rta = manager.crear()
     return rta
+
+@router.get("/")
+async def listar_pagos(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
+    consulta = PagosManager(db)
+    if id:
+        try:
+            consulta = consulta.obtener_uno(id)
+            lista_pagos = []
+            if not consulta:
+                return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
+            for pago in consulta:
+                lista_pagos.append({
+                    'id': pago.id_pago,
+                    'monto': pago.monto,
+                    'id_cliente': pago.id_cliente
+                })
+            return JSONResponse(content={"resultado": lista_pagos})
+        except Exception as error:
+            return JSONResponse(content={"error": error.args}, status_code=404)
+    consulta = consulta.obtener_todos()
+    return JSONResponse(content={"resultado": consulta})
