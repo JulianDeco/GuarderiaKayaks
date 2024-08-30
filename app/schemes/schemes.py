@@ -69,7 +69,7 @@ class Embarcacion(BaseModel):
     color: str
     año_ingreso: datetime.date
     percha: int
-    id_cliente: int
+    id_cliente: str
 
     class Config:
         json_schema_extra = {
@@ -81,7 +81,7 @@ class Embarcacion(BaseModel):
                 "color": "Azul",
                 "año_ingreso": datetime.date(2023, 1, 1).isoformat(),
                 "percha": 5,
-                "id_cliente": 123  # Suponiendo que el ID del cliente es un entero
+                "id_cliente": "123"  # Suponiendo que el ID del cliente es un entero
             }
         }
         

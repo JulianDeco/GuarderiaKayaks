@@ -32,8 +32,8 @@ router = APIRouter(prefix="/pagos", tags=["Pagos"])
 
 @router.post("/")
 async def crear_pagos(pagos: Pago, db: Session = Depends(get_db)):
-    manager = PagosManager(db, pagos)
-    rta = manager.crear()
+    manager = PagosManager(db)
+    rta = manager.crear(pagos)
     return rta
 
 @router.get("/")
@@ -41,7 +41,7 @@ async def listar_pagos(id: Optional[int] = None, db: Session = Depends(get_db)) 
     consulta = PagosManager(db)
     if id:
         try:
-            consulta = consulta.obtener_uno(id)
+            consulta = consulta.obtener_todos()
             lista_pagos = []
             if not consulta:
                 return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
@@ -49,10 +49,10 @@ async def listar_pagos(id: Optional[int] = None, db: Session = Depends(get_db)) 
                 lista_pagos.append({
                     'id': pago.id_pago,
                     'monto': pago.monto,
-                    'id_cliente': pago.id_cliente
+                    'cliente': pago.cliente
                 })
             return JSONResponse(content={"resultado": lista_pagos})
         except Exception as error:
             return JSONResponse(content={"error": error.args}, status_code=404)
-    consulta = consulta.obtener_todos()
+    consulta = consulta.obtener_uno(id)
     return JSONResponse(content={"resultado": consulta})

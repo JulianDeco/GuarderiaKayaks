@@ -1,0 +1,1195 @@
+{
+"openapi": "3.1.0",
+"info": {
+"title": "Refugio del Remo",
+"description": "Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT",
+"version": "0.1.0"
+},
+"paths": {
+"/ping": {
+"get": {
+"summary": "Pong",
+"operationId": "pong_ping_get",
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+}
+}
+}
+},
+"/v1/auth/login": {
+"post": {
+"tags": [
+"Autenticación"
+],
+"summary": "Login",
+"operationId": "login_v1_auth_login_post",
+"requestBody": {
+"content": {
+"application/x-www-form-urlencoded": {
+"schema": {
+"$ref": "#/components/schemas/Body_login_v1_auth_login_post"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+}
+},
+"/v1/embarcaciones/": {
+"post": {
+"tags": [
+"Embarcaciones"
+],
+"summary": "Cargar Embarcacion",
+"operationId": "cargar_embarcacion_v1_embarcaciones__post",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"requestBody": {
+"required": true,
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/Embarcacion"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+},
+"get": {
+"tags": [
+"Embarcaciones"
+],
+"summary": "Listar Embarcacion",
+"operationId": "listar_embarcacion_v1_embarcaciones__get",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"parameters": [
+{
+"name": "id",
+"in": "query",
+"required": false,
+"schema": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"title": "Id"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+},
+"delete": {
+"tags": [
+"Embarcaciones"
+],
+"summary": "Eliminar Embarcacion",
+"operationId": "eliminar_embarcacion_v1_embarcaciones__delete",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"parameters": [
+{
+"name": "id",
+"in": "query",
+"required": true,
+"schema": {
+"type": "integer",
+"title": "Id"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+},
+"put": {
+"tags": [
+"Embarcaciones"
+],
+"summary": "Modificar Embarcacion",
+"operationId": "modificar_embarcacion_v1_embarcaciones__put",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"requestBody": {
+"required": true,
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/Embarcacion"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+}
+},
+"/v1/clientes/": {
+"post": {
+"tags": [
+"Clientes"
+],
+"summary": "Cargar Cliente",
+"operationId": "cargar_cliente_v1_clientes__post",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"requestBody": {
+"required": true,
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/Cliente"
+}
+}
+}
+},
+"responses": {
+"201": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+},
+"get": {
+"tags": [
+"Clientes"
+],
+"summary": "Listar Clientes",
+"operationId": "listar_clientes_v1_clientes__get",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"parameters": [
+{
+"name": "id",
+"in": "query",
+"required": false,
+"schema": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"title": "Id"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+},
+"delete": {
+"tags": [
+"Clientes"
+],
+"summary": "Baja Cliente",
+"operationId": "baja_cliente_v1_clientes__delete",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"parameters": [
+{
+"name": "id_cliente",
+"in": "query",
+"required": true,
+"schema": {
+"type": "string",
+"title": "Id Cliente"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+}
+},
+"/v1/clientes/{id_cliente}": {
+"put": {
+"tags": [
+"Clientes"
+],
+"summary": "Modifica Cliente",
+"operationId": "modifica_cliente_v1_clientes__id_cliente__put",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"parameters": [
+{
+"name": "id_cliente",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string",
+"title": "Id Cliente"
+}
+}
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"allOf": [
+{
+"$ref": "#/components/schemas/ClienteModificacion"
+}
+],
+"title": "Ob Cliente"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+}
+},
+"/v1/pagos/": {
+"post": {
+"tags": [
+"Pagos"
+],
+"summary": "Crear Pagos",
+"operationId": "crear_pagos_v1_pagos__post",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"requestBody": {
+"required": true,
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/Pago"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+},
+"get": {
+"tags": [
+"Pagos"
+],
+"summary": "Listar Pagos",
+"operationId": "listar_pagos_v1_pagos__get",
+"security": [
+{
+"JWTBearer": []
+}
+],
+"parameters": [
+{
+"name": "id",
+"in": "query",
+"required": false,
+"schema": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"title": "Id"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Successful Response",
+"content": {
+"application/json": {
+"schema": {}
+}
+}
+},
+"403": {
+"description": "Not authenticated",
+"content": {
+"application/json": {
+"examples": {
+"default": {
+"summary": "Default",
+"value": {
+"detail": "Not authenticated"
+}
+},
+"invalid_token": {
+"summary": "Invalid or expired token",
+"value": {
+"detail": "Invalid token or expired token."
+}
+},
+"invalid_scheme": {
+"summary": "Invalid authentication scheme",
+"value": {
+"detail": "Invalid authentication scheme."
+}
+}
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/HTTPValidationError"
+}
+}
+}
+}
+}
+}
+}
+},
+"components": {
+"schemas": {
+"Body_login_v1_auth_login_post": {
+"properties": {
+"grant_type": {
+"anyOf": [
+{
+"type": "string",
+"pattern": "password"
+},
+{
+"type": "null"
+}
+],
+"title": "Grant Type"
+},
+"username": {
+"type": "string",
+"title": "Username"
+},
+"password": {
+"type": "string",
+"title": "Password"
+},
+"scope": {
+"type": "string",
+"title": "Scope",
+"default": ""
+},
+"client_id": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Client Id"
+},
+"client_secret": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Client Secret"
+}
+},
+"type": "object",
+"required": [
+"username",
+"password"
+],
+"title": "Body_login_v1_auth_login_post"
+},
+"Cliente": {
+"properties": {
+"nombre": {
+"type": "string",
+"title": "Nombre"
+},
+"apellido": {
+"type": "string",
+"title": "Apellido"
+},
+"mail": {
+"type": "string",
+"title": "Mail"
+},
+"direccion": {
+"type": "string",
+"title": "Direccion"
+},
+"tipo_documento_id": {
+"type": "integer",
+"title": "Tipo Documento Id"
+},
+"nro_documento": {
+"type": "string",
+"title": "Nro Documento"
+},
+"telefono": {
+"type": "string",
+"title": "Telefono"
+}
+},
+"type": "object",
+"required": [
+"nombre",
+"apellido",
+"mail",
+"direccion",
+"tipo_documento_id",
+"nro_documento",
+"telefono"
+],
+"title": "Cliente",
+"example": {
+"apellido": "Perez",
+"direccion": "Calle Falsa 123, Ciudad, País",
+"mail": "juan.perez@example.com",
+"nombre": "Juan",
+"nro_documento": "12345678",
+"telefono": "3411111111",
+"tipo_documento_id": 1
+}
+},
+"ClienteModificacion": {
+"properties": {
+"nombre": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Nombre"
+},
+"apellido": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Apellido"
+},
+"mail": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Mail"
+},
+"direccion": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Direccion"
+},
+"tipo_documento_id": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"title": "Tipo Documento Id"
+},
+"nro_documento": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Nro Documento"
+},
+"telefono": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"title": "Telefono"
+},
+"habilitado": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"title": "Habilitado"
+}
+},
+"type": "object",
+"title": "ClienteModificacion",
+"example": {
+"apellido": "Perez",
+"direccion": "Calle Falsa 123, Ciudad, País",
+"habilitado": 1,
+"mail": "juan.perez@example.com",
+"nombre": "Juan",
+"nro_documento": "12345678",
+"telefono": "3411111111",
+"tipo_documento_id": 1
+}
+},
+"Embarcacion": {
+"properties": {
+"id": {
+"type": "string",
+"format": "uuid4",
+"title": "Id"
+},
+"tipo_id": {
+"type": "integer",
+"title": "Tipo Id"
+},
+"marca": {
+"type": "string",
+"title": "Marca"
+},
+"modelo": {
+"type": "string",
+"title": "Modelo"
+},
+"color": {
+"type": "string",
+"title": "Color"
+},
+"año_ingreso": {
+"type": "string",
+"format": "date",
+"title": "Año Ingreso"
+},
+"percha": {
+"type": "integer",
+"title": "Percha"
+},
+"id_cliente": {
+"type": "integer",
+"title": "Id Cliente"
+}
+},
+"type": "object",
+"required": [
+"tipo_id",
+"marca",
+"modelo",
+"color",
+"año_ingreso",
+"percha",
+"id_cliente"
+],
+"title": "Embarcacion",
+"example": {
+"año_ingreso": "2023-01-01",
+"color": "Azul",
+"id": "e9a87a46-bcf8-4162-babe-bf6cc88c89a7",
+"id_cliente": 123,
+"marca": "MarcaEjemplo",
+"modelo": "ModeloEjemplo",
+"percha": 5,
+"tipo_id": 1
+}
+},
+"HTTPValidationError": {
+"properties": {
+"detail": {
+"items": {
+"$ref": "#/components/schemas/ValidationError"
+},
+"type": "array",
+"title": "Detail"
+}
+},
+"type": "object",
+"title": "HTTPValidationError"
+},
+"Pago": {
+"properties": {
+"monto": {
+"type": "number",
+"title": "Monto"
+},
+"id_cliente": {
+"type": "integer",
+"title": "Id Cliente"
+}
+},
+"type": "object",
+"required": [
+"monto",
+"id_cliente"
+],
+"title": "Pago"
+},
+"ValidationError": {
+"properties": {
+"loc": {
+"items": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "integer"
+}
+]
+},
+"type": "array",
+"title": "Location"
+},
+"msg": {
+"type": "string",
+"title": "Message"
+},
+"type": {
+"type": "string",
+"title": "Error Type"
+}
+},
+"type": "object",
+"required": [
+"loc",
+"msg",
+"type"
+],
+"title": "ValidationError"
+}
+},
+"securitySchemes": {
+"JWTBearer": {
+"type": "http",
+"scheme": "bearer"
+}
+}
+},
+"tags": [
+{
+"name": "Embarcaciones",
+"description": "Endpoints relacionados a embarcaciones."
+},
+{
+"name": "Clientes",
+"description": "Endpoints relacionados a clientes."
+},
+{
+"name": "Autenticación",
+"description": "Endpoints relacionados a la autenticación y seguridad del sistema."
+},
+{
+"name": "Pagos",
+"description": "Endpoints relacionados a los pagos."
+}
+]
+}
