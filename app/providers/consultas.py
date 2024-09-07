@@ -61,11 +61,14 @@ class EmbarcacionesManager(ManagerGral):
         self.instancia_db.commit()
         pass
     
-    def eliminar(self, id: int):
-        """Eliminar una embarcación, en realidad es una baja lógica y no eliminación real"""
-        eliminar_embacaion = self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion == id).delete()
-        self.instancia_db.commit()
-        return eliminar_embacaion
+    def eliminar(self, embarcion_id):
+        busqueda_embarcacion = self.obtener_uno(embarcion_id)
+        if busqueda_embarcacion:
+            busqueda_embarcacion.fecha_baja = datetime.datetime.now()
+            busqueda_embarcacion.habilitado = 0
+            self.instancia_db.commit()
+            return
+        raise HTTPException(content={"detalle":"embarcacion no encontrado"}, status_code=404)
         
     
     def modificar(self, objeto):

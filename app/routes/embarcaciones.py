@@ -69,12 +69,19 @@ async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get
                     'id': consulta.id_embarcacion,
                     'modelo':consulta.modelo,
                     'color': consulta.color,
-                    'cliente':consulta.cliente
+                    'cliente':consulta.clientes
                 }})
 
 @router.delete("/")
-async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):
-    return
+async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
+    consulta_embarcacion = EmbarcacionesManager(db)
+    consulta_embarcacion.eliminar(id)
+    return JSONResponse(
+        content={
+            "detalle": "embarcacion eliminado"
+        },
+    status_code=200
+    )
 
 @router.put("/")
 async def modificar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
