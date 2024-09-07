@@ -88,6 +88,7 @@ class Pagos(Base):
     monto = Column(DECIMAL(10, 2))
     fecha_pago = Column(DateTime, server_default=func.now())
     fecha_pago_realizado = Column(DateTime, default=None)
+    aviso_mail = Column(Integer, default = 0)
     id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
 
     cliente = relationship("Clientes", back_populates="pagos")

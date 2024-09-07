@@ -9,6 +9,8 @@ from app.models.models import Base, SessionLocal, engine
 
 from sqlalchemy.orm import Session
 
+import json
+
 import logging
 logger = logging.getLogger(f'{__name__}')
 
@@ -37,9 +39,9 @@ async def crear_pagos(pagos: Pago, db: Session = Depends(get_db)):
     return rta
 
 @router.get("/")
-async def listar_pagos(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
+async def listar_pagos(id: Optional[str] = None, db: Session = Depends(get_db)) -> JSONResponse:   
     consulta = PagosManager(db)
-    if id:
+    if not id:
         try:
             consulta = consulta.obtener_todos()
             lista_pagos = []
@@ -48,11 +50,36 @@ async def listar_pagos(id: Optional[int] = None, db: Session = Depends(get_db)) 
             for pago in consulta:
                 lista_pagos.append({
                     'id': pago.id_pago,
-                    'monto': pago.monto,
-                    'cliente': pago.cliente
+                    'monto': float(pago.monto),
+                    'fecha': str(pago.fecha_pago),
+                    'cliente': {
+                        "id": pago.cliente.id_cliente,
+                        "nombre": pago.cliente.nombre,
+                        "apellido": pago.cliente.apellido,
+                        "mail": pago.cliente.mail,
+                        "direccion": pago.cliente.direccion,
+                        "nro_documento": pago.cliente.nro_documento,
+                        "telefono": pago.cliente.telefono,
+                        
+                    }
                 })
             return JSONResponse(content={"resultado": lista_pagos})
         except Exception as error:
+            logger.exception(error)
             return JSONResponse(content={"error": error.args}, status_code=404)
     consulta = consulta.obtener_uno(id)
-    return JSONResponse(content={"resultado": consulta})
+    return JSONResponse(content={"resultado": {
+                    'id': consulta.id_pago,
+                    'monto': float(consulta.monto),
+                    'fecha': str(consulta.fecha_pago),
+                    'cliente': {
+                        "id": consulta.cliente.id_cliente,
+                        "nombre": consulta.cliente.nombre,
+                        "apellido": consulta.cliente.apellido,
+                        "mail": consulta.cliente.mail,
+                        "direccion": consulta.cliente.direccion,
+                        "nro_documento": consulta.cliente.nro_documento,
+                        "telefono": consulta.cliente.telefono,
+                        
+                    }
+                }})

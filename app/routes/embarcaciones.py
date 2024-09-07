@@ -37,7 +37,7 @@ async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get
     return rta
 
 @router.get("/")
-async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
+async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get_db)) -> JSONResponse:   
     consulta = EmbarcacionesManager(db)
     if not id:
         try:
@@ -69,7 +69,7 @@ async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get
                     'id': consulta.id_embarcacion,
                     'modelo':consulta.modelo,
                     'color': consulta.color,
-                    'cliente':consulta.clientes
+                    'cliente':consulta.cliente
                 }})
 
 @router.delete("/")

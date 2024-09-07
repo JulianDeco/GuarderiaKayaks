@@ -4,13 +4,17 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from fastapi_utils.tasks import repeat_every
+
 from app.middlewares.middleware import RateLimitingMiddleware
+from app.providers.aviso_mail import envio_mail
+from app.providers.consultas import PagosManager
 from app.routes.autenticacion import router as autenticacion
 from app.routes.embarcaciones import router as embarcaciones
 from app.routes.clientes import router as clientes
 from app.routes.pagos import router as pagos
 
-from app.models.models import Base, SessionLocal, engine
+from app.models.models import Base, Pagos, SessionLocal, engine
 
 from app.security.config_jwt import JWTBearer
 
@@ -41,6 +45,10 @@ tags_metadata = [
         "name": "Pagos",
         "description": "Endpoints relacionados a los pagos." 
     },
+    {
+        "name": "Mails",
+        "description": "Endpoints relacionados a los mails." 
+    }
 ]
 
 security = JWTBearer()
@@ -111,3 +119,15 @@ app.include_router(autenticacion, prefix="/v1", responses= responses)
 app.include_router(embarcaciones, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(clientes, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(pagos, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+
+
+@app.on_event("startup")
+@repeat_every(seconds=60, raise_exceptions=True)  # 24 horas
+def background_tasks() -> None:
+    instancia_db = next(get_db())
+    pagos = PagosManager(instancia_db)
+    lista_pagos_vencidos = pagos.obtener_vencidos()
+    if lista_pagos_vencidos:
+        for pago_vencido in lista_pagos_vencidos:
+            envio_mail([pago_vencido.cliente.mail], "Aviso pago", f"{pago_vencido.cliente.nombre} {pago_vencido.cliente.apellido}", pago_vencido.fecha_pago)
+            pagos.modificar(pago_vencido.id_pago, 1)

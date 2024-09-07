@@ -35,7 +35,7 @@ async def cargar_cliente(ob_cliente: Cliente, db: Session = Depends(get_db)):
     return JSONResponse(content={"estado":"cliente creado"}, status_code=201)
 
 @router.get("/")
-async def listar_clientes(id: Optional[int] = None, db: Session = Depends(get_db)):
+async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db)):
     consulta_cliente = ClientesManager(db)
     if not id:
         res = consulta_cliente.obtener_todos()

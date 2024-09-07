@@ -110,8 +110,9 @@ class MailsManager(ManagerGral):
     def obtener_todos(self):
         return self.instancia_db.query(self.mail).all()
     
-    def enviar_mail(self):
+    def eliminar(self):
         pass
+
     
     
 class PagosManager(ManagerGral):
@@ -129,11 +130,33 @@ class PagosManager(ManagerGral):
         self.instancia_db.commit()
         pass
     
+    def eliminar(self):
+        pass
+    
+    def modificar(self, id, enviado):
+        self.instancia_db.query(self.pagos).filter(
+            self.pagos.id_pago == id
+        ).update({
+            self.pagos.aviso_mail: enviado
+        })
+        self.instancia_db.commit()
+    
     def obtener_uno(self, id = int):
         return self.instancia_db.query(self.pagos).filter(self.pagos.id_pago == id).first()
     
     def obtener_todos(self):
         return self.instancia_db.query(self.pagos).all()
+    
+    def obtener_vencidos(self):
+        return (
+                self.instancia_db.query(self.pagos)
+                .filter(
+                    self.pagos.fecha_pago <= datetime.datetime.now(),
+                    self.pagos.fecha_pago_realizado.isnot(None),
+                    self.pagos.aviso_mail != 1
+                )
+                .all()
+            )
     
 class ClientesManager(ManagerGral):
     def __init__(self, instancia_db):
