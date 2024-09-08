@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Depends, Response
+from fastapi import FastAPI, Request, Depends, Response, BackgroundTasks
 from starlette.background import BackgroundTask
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -122,12 +122,29 @@ app.include_router(pagos, dependencies= [Depends(security)], prefix="/v1", respo
 
 
 @app.on_event("startup")
-@repeat_every(seconds=60, raise_exceptions=True)  # 24 horas
+@repeat_every(seconds=60, raise_exceptions = True)  # 24 horas
 def background_tasks() -> None:
-    instancia_db = next(get_db())
-    pagos = PagosManager(instancia_db)
-    lista_pagos_vencidos = pagos.obtener_vencidos()
-    if lista_pagos_vencidos:
-        for pago_vencido in lista_pagos_vencidos:
-            envio_mail([pago_vencido.cliente.mail], "Aviso pago", f"{pago_vencido.cliente.nombre} {pago_vencido.cliente.apellido}", pago_vencido.fecha_pago)
-            pagos.modificar(pago_vencido.id_pago, 1)
+    try:
+        instancia_db = next(get_db())
+        pagos = PagosManager(instancia_db)
+        lista_pagos_vencidos = pagos.obtener_vencidos()
+        logger.info(lista_pagos_vencidos)
+        
+        if lista_pagos_vencidos:
+            for pago_vencido in lista_pagos_vencidos:
+                try:
+                    envio_mail( 
+                        [pago_vencido.cliente.mail], 
+                        "Aviso pago", 
+                        f"{pago_vencido.cliente.nombre} {pago_vencido.cliente.apellido}", 
+                        pago_vencido.fecha_pago
+                    )
+                    logger.info(f"Correo enviado para el pago {pago_vencido.id_pago}")
+                    
+                    # Modificar el estado de aviso_mail a 1
+                    pagos.modificar(pago_vencido.id_pago, 1)
+                    logger.info('FIN BUCLE')
+                except Exception as e:
+                    logger.error(f"Error enviando mail o modificando el pago {pago_vencido.id_pago}: {e}")
+    except Exception as error:
+        logger.error(f"Error en la tarea de background: {error}")

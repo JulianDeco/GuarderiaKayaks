@@ -1,5 +1,12 @@
+from smtplib import SMTP_SSL as SMTP  
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import os
-import resend
+
+SMTP_HOST = "smtp.resend.com"
+SMTP_PORT = 465 
+SMTP_USERNAME = "resend"
+SMTP_PASSWORD = os.getenv("RESEND_API_KEY")
 
 def aviso_mail_plantilla(nombre_cliente, fecha_vencimiento):
     html_aviso = f"""
@@ -89,18 +96,22 @@ def aviso_mail_plantilla(nombre_cliente, fecha_vencimiento):
     """
     return html_aviso
 
-def envio_mail(envio_a, asunto, nombre_cliente, fecha_vencimiento, enviado_de = "El refugio del remo <onboarding@resend.dev>"):
+def envio_mail(destinatarios, asunto, nombre_cliente, fecha_vencimiento, enviado_de="El refugio del remo <onboarding@resend.dev>"):
+    try:
+        cuerpo_html = aviso_mail_plantilla(nombre_cliente, fecha_vencimiento)
 
-    resend.api_key = os.environ["RESEND_API_KEY"]
+        mensaje = MIMEMultipart()
+        mensaje["From"] = enviado_de
+        mensaje["To"] = ", ".join(destinatarios)
+        mensaje["Subject"] = asunto
 
-    html_mail = aviso_mail_plantilla(nombre_cliente, fecha_vencimiento)
-    if html_mail:
-        params: resend.Emails.SendParams = {
-        "from": enviado_de,
-        "to": envio_a,
-        "subject": asunto,
-        "html": html_mail,
-        }
-        email = resend.Emails.send(params)
+        mensaje.attach(MIMEText(cuerpo_html, "html"))
+        conn = SMTP(SMTP_HOST)
+        conn.set_debuglevel(False)
+        conn.login(SMTP_USERNAME, SMTP_PASSWORD)
+
+        conn.sendmail(enviado_de, destinatarios, mensaje.as_string())
+        print("Correo enviado correctamente")
+    except Exception as e:
+        print(f"Error enviando correo: {e}")
         
-envio_mail(["juliandecoppet@gmail.com"], "prueba", "juli", "2024/07/09")

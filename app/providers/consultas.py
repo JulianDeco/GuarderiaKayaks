@@ -81,7 +81,7 @@ class EmbarcacionesManager(ManagerGral):
                 self.tipo.color: objeto.color,
                 self.tipo.percha: objeto.percha,
                 self.tipo.id_cliente: objeto.id_cliente
-            }
+            }, synchronize_session=False
         )
         self.instancia_db.commit()
         return modificar_embarcacion
@@ -135,12 +135,13 @@ class PagosManager(ManagerGral):
     
     def modificar(self, id, enviado):
         self.instancia_db.query(self.pagos).filter(
-            self.pagos.id_pago == id
-        ).update({
-            self.pagos.aviso_mail: enviado
-        })
+                self.pagos.id_pago == id
+            ).update({
+                self.pagos.aviso_mail: enviado
+            }, synchronize_session=False)
+            
         self.instancia_db.commit()
-    
+
     def obtener_uno(self, id = int):
         return self.instancia_db.query(self.pagos).filter(self.pagos.id_pago == id).first()
     
@@ -152,7 +153,7 @@ class PagosManager(ManagerGral):
                 self.instancia_db.query(self.pagos)
                 .filter(
                     self.pagos.fecha_pago <= datetime.datetime.now(),
-                    self.pagos.fecha_pago_realizado.isnot(None),
+                    self.pagos.fecha_pago_realizado.is_(None),
                     self.pagos.aviso_mail != 1
                 )
                 .all()
