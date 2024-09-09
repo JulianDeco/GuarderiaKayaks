@@ -74,7 +74,7 @@ class Embarcaciones(Base):
     color = Column(String(250))
     fecha_ingreso = Column(DateTime, server_default=func.now())
     fecha_baja = Column(DateTime, default=None)
-    percha = Column(Integer)
+    percha = Column(Integer, unique=True)
     id_cliente = Column(String(36), ForeignKey('clientes.id_cliente'))
     habilitado = Column(Integer, default= 1)
 

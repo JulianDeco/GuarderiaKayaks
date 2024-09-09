@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.schemes.schemes import Embarcacion
+from app.schemes.schemes import Embarcacion, EmbarcacionModificacion
 from app.providers.consultas import EmbarcacionesManager
 from app.models.models import Base, SessionLocal, engine
 
@@ -49,6 +49,12 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
                 lista_embarcaciones.append({
                     'id': embarcacion.id_embarcacion,
                     'modelo':embarcacion.modelo,
+                    'marca':embarcacion.marca,
+                    'fecha_ingreso': str(embarcacion.fecha_ingreso),
+                    'fecha_baja': str(embarcacion.fecha_baja),
+                    'percha' : embarcacion.percha,
+                    'habilitado': embarcacion.habilitado,
+                    'tipo_kayak': embarcacion.tipo_embarcacion.descripcion,
                     'color': embarcacion.color,
                     'cliente': {
                         "id": embarcacion.cliente.id_cliente,
@@ -83,6 +89,8 @@ async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
     status_code=200
     )
 
-@router.put("/")
-async def modificar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
-    return
+@router.put("/{id_embarcacion}")
+async def modificar_embarcacion(id_embarcacion: str, embarcacion: EmbarcacionModificacion, db: Session = Depends(get_db)):
+    embarcacion_db = EmbarcacionesManager(db)
+    embarcacion_db = embarcacion_db.modificar(id_embarcacion, embarcacion)
+    return {"message": "Embarcación actualizada", "embarcacion": embarcacion_db}

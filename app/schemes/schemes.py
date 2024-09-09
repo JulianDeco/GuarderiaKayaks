@@ -62,7 +62,6 @@ class ClienteModificacion(BaseModel):
         }
 
 class Embarcacion(BaseModel):
-    id: UUID4 = Field(default_factory=uuid4)
     tipo_id: int
     marca: str
     modelo: str
@@ -74,7 +73,6 @@ class Embarcacion(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "id": str(uuid4()),
                 "tipo_id": 1,  # Ejemplo: 1 para Velero, 2 para Yate, etc.
                 "marca": "MarcaEjemplo",
                 "modelo": "ModeloEjemplo",
@@ -96,3 +94,20 @@ class Pago(BaseModel):
                 "id_cliente": 1
             }
         }
+        
+class PagoRealizado(BaseModel):
+    fecha_pago: datetime.datetime
+        
+class EmbarcacionModificacion(BaseModel):
+    tipo_id: Optional[int] = None
+    marca: Optional[str] = None
+    modelo: Optional[str] = None
+    color: Optional[str] = None
+    percha: Optional[int] = None
+    id_cliente: Optional[str] = None
+    habilitado: Optional[int] = Field(default=1)
+    fecha_baja: Optional[datetime.datetime] = None
+
+    class Config:
+        orm_mode = True
+        

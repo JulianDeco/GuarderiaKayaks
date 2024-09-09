@@ -48,6 +48,7 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
                 "mail": res_cliente.mail,
                 "direccion": res_cliente.direccion,
                 "nro_documento": res_cliente.nro_documento,
+                "tipo_documento": res_cliente.tipo_documento_rel.descripcion,
                 "telefono": res_cliente.telefono,
                 "habilitado":res_cliente.habilitado
             })
@@ -64,6 +65,7 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
                 "mail": res_cliente.mail,
                 "direccion": res_cliente.direccion,
                 "nro_documento": res_cliente.nro_documento,
+                "tipo_documento": res_cliente.tipo_documento_rel.descripcion,
                 "telefono": res_cliente.telefono,
                 "habilitado":res_cliente.habilitado
             },

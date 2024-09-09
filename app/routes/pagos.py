@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.schemes.schemes import Embarcacion, Pago
+from app.schemes.schemes import Embarcacion, Pago, PagoRealizado
 from app.providers.consultas import EmbarcacionesManager, PagosManager
 from app.models.models import Base, SessionLocal, engine
 
@@ -83,3 +83,9 @@ async def listar_pagos(id: Optional[str] = None, db: Session = Depends(get_db)) 
                         
                     }
                 }})
+
+@router.put("/{id_pago}")
+async def pago_realizado(id_pago: str, body: PagoRealizado, db: Session = Depends(get_db)) -> JSONResponse:
+    pago = PagosManager(db)
+    pago = pago.modificar(id_pago)
+    return JSONResponse(content={"estado":pago})

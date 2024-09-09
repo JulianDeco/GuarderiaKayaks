@@ -1,200 +1,172 @@
 from abc import ABC, abstractmethod
 import datetime
 from typing import Optional
-
 from fastapi import HTTPException
-
 
 from app.models.models import Embarcaciones, Mails, Pagos, Clientes
 from app.schemes.schemes import Cliente, Embarcacion, Pago, ClienteModificacion
 
-
 class ManagerGral(ABC):
-    """
-    AAAAAA te asesino amigo
-    """
+    """Gestión general para todas las entidades"""
+
     def __init__(self, instancia_db):
         self.instancia_db = instancia_db
     
-    @abstractmethod    
+    @abstractmethod
     def crear(self):
-        """Crear un objeto"""
         pass
     
-    @abstractmethod 
-    def eliminar(self):
-        """Eliminar un objeto"""
+    @abstractmethod
+    def eliminar(self, id):
         pass
     
-    @abstractmethod 
-    def modificar(self):
-        """Modificar un objeto"""
+    @abstractmethod
+    def modificar(self, id, obj):
         pass
     
-    @abstractmethod 
+    @abstractmethod
     def obtener_uno(self, id):
-        """Obtener un objeto por su ID"""
         pass
     
-    @abstractmethod 
+    @abstractmethod
     def obtener_todos(self):
-        """Obtener todos los objetos"""
         pass
-
+    
+    def commit(self):
+        """Realizar commit de la sesión"""
+        try:
+            self.instancia_db.commit()
+        except Exception as e:
+            self.instancia_db.rollback()
+            raise HTTPException(status_code=500, detail=f"Error al guardar cambios: {e}")
 
 class EmbarcacionesManager(ManagerGral):
-    def __init__(self, instancia_db):
-        super().__init__(instancia_db)
-        self.tipo = Embarcaciones
     
     def crear(self, embarcacion: Embarcacion):
-        """Crear una embarcación"""
-        crear_embarcacion = Embarcaciones(
-            tipo_id = embarcacion.tipo_id,
-            marca = embarcacion.marca,
-            modelo = embarcacion.modelo,
-            color = embarcacion.color,
-            percha = embarcacion.percha,
-            id_cliente = embarcacion.id_cliente
+        nueva_embarcacion = Embarcaciones(
+            tipo_id=embarcacion.tipo_id,
+            marca=embarcacion.marca,
+            modelo=embarcacion.modelo,
+            color=embarcacion.color,
+            percha=embarcacion.percha,
+            id_cliente=embarcacion.id_cliente
         )
-        self.instancia_db.add(crear_embarcacion)
-        self.instancia_db.commit()
-        pass
+        self.instancia_db.add(nueva_embarcacion)
+        self.commit()
     
-    def eliminar(self, embarcion_id):
-        busqueda_embarcacion = self.obtener_uno(embarcion_id)
-        if busqueda_embarcacion:
-            busqueda_embarcacion.fecha_baja = datetime.datetime.now()
-            busqueda_embarcacion.habilitado = 0
-            self.instancia_db.commit()
-            return
-        raise HTTPException(content={"detalle":"embarcacion no encontrado"}, status_code=404)
-        
-    
-    def modificar(self, objeto):
-        
-        """Modificar una embarcación"""
-        modificar_embarcacion = self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion == id).update(
-            {
-                self.tipo.marca: objeto.marca,
-                self.tipo.modelo: objeto.modelo,
-                self.tipo.color: objeto.color,
-                self.tipo.percha: objeto.percha,
-                self.tipo.id_cliente: objeto.id_cliente
-            }, synchronize_session=False
-        )
-        self.instancia_db.commit()
-        return modificar_embarcacion
-    
-    def obtener_uno(self, id=int):
-        """Obtener una embarcación por su ID"""
-        return self.instancia_db.query(self.tipo).filter(self.tipo.id_embarcacion== id).first()
-    
+    def eliminar(self, id_embarcacion):
+        embarcacion = self.obtener_uno(id_embarcacion)
+        if embarcacion:
+            embarcacion.fecha_baja = datetime.datetime.now()
+            embarcacion.habilitado = 0
+            self.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Embarcación no encontrada")
+
+    def modificar(self, id_embarcacion, embarcacion: Embarcacion):
+        objeto_actual = self.obtener_uno(id_embarcacion)
+        if objeto_actual:
+            for key, value in embarcacion.dict(exclude_unset=True).items():
+                setattr(objeto_actual, key, value)
+            self.commit()
+            self.instancia_db.refresh(objeto_actual)
+            return objeto_actual
+        raise HTTPException(status_code=404, detail="Embarcación no encontrada")
+
+    def obtener_uno(self, id_embarcacion):
+        return self.instancia_db.query(Embarcaciones).filter(Embarcaciones.id_embarcacion == id_embarcacion).first()
+
     def obtener_todos(self):
-        """Obtener todas las embarcaciones"""
-        return self.instancia_db.query(self.tipo).all()
-    
+        return self.instancia_db.query(Embarcaciones).all()
+
 class MailsManager(ManagerGral):
-    def __init__(self, instancia_db):
-        super().__init__(instancia_db)
-        self.instancia_db = instancia_db
-        self.mail =  Mails
-
     def crear(self):
-        
-        return
-    
-    def obtener_uno(self, id = int):
-        return self.instancia_db.query(self.mail).filter(self.mail.id_pago == id).first()
-    
-    def obtener_todos(self):
-        return self.instancia_db.query(self.mail).all()
-    
-    def eliminar(self):
-        pass
+        pass  # Implementar según sea necesario
 
-    
-    
+    def eliminar(self, id_mail):
+        pass  # Implementar según sea necesario
+
+    def modificar(self, id_mail, mail: Mails):
+        pass  # Implementar según sea necesario
+
+    def obtener_uno(self, id_mail):
+        return self.instancia_db.query(Mails).filter(Mails.id == id_mail).first()
+
+    def obtener_todos(self):
+        return self.instancia_db.query(Mails).all()
+
 class PagosManager(ManagerGral):
-    def __init__(self, instancia_db):
-        super().__init__(instancia_db)
-        self.instancia_db = instancia_db
-        self.pagos = Pagos
-        
-    def crear(self, pagos: Pago):
-        nuego_pago = Pagos(
-            monto = pagos.monto,
-            id_cliente = pagos.id_cliente
+    def crear(self, pago: Pago):
+        nuevo_pago = Pagos(
+            monto=pago.monto,
+            id_cliente=pago.id_cliente
         )
-        self.instancia_db.add(nuego_pago)
-        self.instancia_db.commit()
-        pass
-    
-    def eliminar(self):
-        pass
-    
-    def modificar(self, id, enviado):
-        self.instancia_db.query(self.pagos).filter(
-                self.pagos.id_pago == id
-            ).update({
-                self.pagos.aviso_mail: enviado
-            }, synchronize_session=False)
-            
-        self.instancia_db.commit()
+        self.instancia_db.add(nuevo_pago)
+        self.commit()
 
-    def obtener_uno(self, id = int):
-        return self.instancia_db.query(self.pagos).filter(self.pagos.id_pago == id).first()
-    
+    def eliminar(self, id_pago):
+        pass  # Implementar según sea necesario
+
+    def modificar(self, id_pago, aviso_mail: bool):
+        pago = self.obtener_uno(id_pago)
+        if pago:
+            pago.aviso_mail = aviso_mail
+            self.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Pago no encontrado")
+
+    def obtener_uno(self, id_pago):
+        return self.instancia_db.query(Pagos).filter(Pagos.id_pago == id_pago).first()
+
     def obtener_todos(self):
-        return self.instancia_db.query(self.pagos).all()
-    
+        return self.instancia_db.query(Pagos).all()
+
     def obtener_vencidos(self):
         return (
-                self.instancia_db.query(self.pagos)
-                .filter(
-                    self.pagos.fecha_pago <= datetime.datetime.now(),
-                    self.pagos.fecha_pago_realizado.is_(None),
-                    self.pagos.aviso_mail != 1
-                )
-                .all()
+            self.instancia_db.query(Pagos)
+            .filter(
+                Pagos.fecha_pago <= datetime.datetime.now(),
+                Pagos.fecha_pago_realizado.is_(None),
+                Pagos.aviso_mail != 1
             )
-    
-class ClientesManager(ManagerGral):
-    def __init__(self, instancia_db):
-        super().__init__(instancia_db)
-        self.instancia_db = instancia_db
-        self.clientes = Clientes
-        
-    def crear(self, obj_cliente: Cliente):
-        cliente_nuevo = Clientes(
-            nombre = obj_cliente.nombre,
-            apellido = obj_cliente.apellido,
-            mail = obj_cliente.mail,
-            direccion = obj_cliente.direccion,
-            tipo_documento_id = obj_cliente.tipo_documento_id,
-            nro_documento = obj_cliente.nro_documento,
-            telefono = obj_cliente.telefono ,
-        
+            .all()
         )
-        self.instancia_db.add(cliente_nuevo)
-        self.instancia_db.commit()
-        pass
-    
-    def obtener_uno(self, id = int):
-        return self.instancia_db.query(self.clientes).filter(self.clientes.id_cliente == id).first()
-    
+
+class ClientesManager(ManagerGral):
+    def crear(self, cliente: Cliente):
+        nuevo_cliente = Clientes(
+            nombre=cliente.nombre,
+            apellido=cliente.apellido,
+            mail=cliente.mail,
+            direccion=cliente.direccion,
+            tipo_documento_id=cliente.tipo_documento_id,
+            nro_documento=cliente.nro_documento,
+            telefono=cliente.telefono
+        )
+        self.instancia_db.add(nuevo_cliente)
+        self.commit()
+
+    def eliminar(self, id_cliente):
+        cliente = self.obtener_uno(id_cliente)
+        if cliente:
+            cliente.habilitado = 0
+            cliente.fecha_baja = datetime.datetime.now()
+            self.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Cliente no encontrado")
+
+    def modificar(self, id_cliente, cliente: ClienteModificacion):
+        cliente_actual = self.obtener_uno(id_cliente)
+        if cliente_actual:
+            for key, value in cliente.dict(exclude_unset=True).items():
+                setattr(cliente_actual, key, value)
+            self.commit()
+            self.instancia_db.refresh(cliente_actual)
+            return cliente_actual
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+
+    def obtener_uno(self, id_cliente):
+        return self.instancia_db.query(Clientes).filter(Clientes.id_cliente == id_cliente).first()
+
     def obtener_todos(self):
-        return self.instancia_db.query(self.clientes).all()
-    
-    def eliminar(self, cliente_id):
-        busqueda_cliente = self.obtener_uno(cliente_id)
-        if busqueda_cliente:
-            busqueda_cliente.fecha_baja_cliente = datetime.datetime.now()
-            busqueda_cliente.habilitado = 0
-            self.instancia_db.commit()
-            return
-        raise HTTPException(content={"detalle":"cliente no encontrado"}, status_code=404)
-        
-    def modificar(self, cliente: ClienteModificacion, id_cliente):
-        self.instancia_db.query(self.clientes).filter(self.clientes.id_cliente == id_cliente).update(cliente.model_dump())
-        self.instancia_db.commit()
+        return self.instancia_db.query(Clientes).all()
