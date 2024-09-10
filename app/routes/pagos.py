@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.schemes.schemes import Embarcacion, Pago, PagoRealizado
+from app.schemes.schemes import Embarcacion, Pago, PagoRealizado, PagoRealizadoScheme
 from app.providers.consultas import EmbarcacionesManager, PagosManager
 from app.models.models import Base, SessionLocal, engine
 
@@ -32,11 +32,11 @@ def get_db():
 router = APIRouter(prefix="/pagos", tags=["Pagos"])
 
 
-@router.post("/")
-async def crear_pagos(pagos: Pago, db: Session = Depends(get_db)):
+@router.post("/{id_pago}")
+async def realizar_pago(id_pago: str, pago: PagoRealizadoScheme,  db: Session = Depends(get_db)):
     manager = PagosManager(db)
-    rta = manager.crear(pagos)
-    return rta
+    rta = manager.realizar_pago(id_pago, pago.fecha_pago_realizado)
+    return JSONResponse(content= {'estado': 'Pago realizado!'})
 
 @router.get("/")
 async def listar_pagos(id: Optional[str] = None, db: Session = Depends(get_db)) -> JSONResponse:   
@@ -83,9 +83,3 @@ async def listar_pagos(id: Optional[str] = None, db: Session = Depends(get_db)) 
                         
                     }
                 }})
-
-@router.put("/{id_pago}")
-async def pago_realizado(id_pago: str, body: PagoRealizado, db: Session = Depends(get_db)) -> JSONResponse:
-    pago = PagosManager(db)
-    pago = pago.modificar(id_pago)
-    return JSONResponse(content={"estado":pago})

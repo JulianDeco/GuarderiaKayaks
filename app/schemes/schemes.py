@@ -116,3 +116,6 @@ class ParametroModificacion(BaseModel):
 
     class Config:
         orm_mode = True
+        
+class PagoRealizadoScheme(BaseModel):
+    fecha_pago_realizado: datetime.datetime

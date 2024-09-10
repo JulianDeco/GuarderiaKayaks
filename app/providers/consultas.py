@@ -60,6 +60,7 @@ class EmbarcacionesManager(ManagerGral):
         if embarcacion:
             embarcacion.fecha_baja = datetime.datetime.now()
             embarcacion.habilitado = 0
+            embarcacion.percha = None
             self.commit()
         else:
             raise HTTPException(status_code=404, detail="Embarcación no encontrada")
@@ -106,12 +107,7 @@ class MailsManager(ManagerGral):
 
 class PagosManager(ManagerGral):
     def crear(self, pago: Pago):
-        nuevo_pago = Pagos(
-            monto=pago.monto,
-            id_cliente=pago.id_cliente
-        )
-        self.instancia_db.add(nuevo_pago)
-        self.commit()
+        pass
 
     def eliminar(self, id_pago):
         pass  # Implementar según sea necesario
@@ -120,6 +116,14 @@ class PagosManager(ManagerGral):
         pago = self.obtener_uno(id_pago)
         if pago:
             pago.aviso_mail = aviso_mail
+            self.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Pago no encontrado")
+
+    def realizar_pago(self, id_pago, fecha_pago_realizado):
+        pago = self.obtener_uno(id_pago)
+        if pago:
+            pago.fecha_pago_realizado = fecha_pago_realizado
             self.commit()
         else:
             raise HTTPException(status_code=404, detail="Pago no encontrado")

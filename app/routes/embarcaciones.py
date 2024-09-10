@@ -74,8 +74,23 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
     return JSONResponse(content={"resultado": {
                     'id': consulta.id_embarcacion,
                     'modelo':consulta.modelo,
+                    'marca':consulta.marca,
+                    'fecha_ingreso': str(consulta.fecha_ingreso),
+                    'fecha_baja': str(consulta.fecha_baja),
+                    'percha' : consulta.percha,
+                    'habilitado': consulta.habilitado,
+                    'tipo_kayak': consulta.tipo_embarcacion.descripcion,
                     'color': consulta.color,
-                    'cliente':consulta.cliente
+                    'cliente': {
+                        "id": consulta.cliente.id_cliente,
+                        "nombre": consulta.cliente.nombre,
+                        "apellido": consulta.cliente.apellido,
+                        "mail": consulta.cliente.mail,
+                        "direccion": consulta.cliente.direccion,
+                        "nro_documento": consulta.cliente.nro_documento,
+                        "telefono": consulta.cliente.telefono,
+                        
+                    }
                 }})
 
 @router.delete("/")
@@ -93,4 +108,24 @@ async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
 async def modificar_embarcacion(id_embarcacion: str, embarcacion: EmbarcacionModificacion, db: Session = Depends(get_db)):
     embarcacion_db = EmbarcacionesManager(db)
     embarcacion_db = embarcacion_db.modificar(id_embarcacion, embarcacion)
-    return {"message": "Embarcación actualizada", "embarcacion": embarcacion_db}
+    return {"message": "Embarcación actualizada", "embarcacion": {
+                    'id': embarcacion_db.id_embarcacion,
+                    'modelo':embarcacion_db.modelo,
+                    'marca':embarcacion_db.marca,
+                    'fecha_ingreso': str(embarcacion_db.fecha_ingreso),
+                    'fecha_baja': str(embarcacion_db.fecha_baja),
+                    'percha' :embarcacion_db.percha,
+                    'habilitado': embarcacion_db.habilitado,
+                    'tipo_kayak': embarcacion_db.tipo_embarcacion.descripcion,
+                    'color': embarcacion_db.color,
+                    'cliente': {
+                        "id": embarcacion_db.cliente.id_cliente,
+                        "nombre": embarcacion_db.cliente.nombre,
+                        "apellido": embarcacion_db.cliente.apellido,
+                        "mail":embarcacion_db.cliente.mail,
+                        "direccion":embarcacion_db.cliente.direccion,
+                        "nro_documento": embarcacion_db.cliente.nro_documento,
+                        "telefono":embarcacion_db.cliente.telefono,
+                        
+                    }
+                }}
