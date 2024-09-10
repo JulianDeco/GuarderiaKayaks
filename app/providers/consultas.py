@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy import extract
 
-from app.models.models import Embarcaciones, Mails, Pagos, Clientes
+from app.models.models import Embarcaciones, Mails, Pagos, Clientes, Parametros
 from app.schemes.schemes import Cliente, Embarcacion, Pago, ClienteModificacion
 
 class ManagerGral(ABC):
@@ -81,14 +81,22 @@ class EmbarcacionesManager(ManagerGral):
         return self.instancia_db.query(Embarcaciones).all()
 
 class MailsManager(ManagerGral):
-    def crear(self):
-        pass  # Implementar según sea necesario
+    def crear(self, mensaje, titulo, receptor_cliente, receptor_mail):
+        nuevo_mail = Mails(
+            mensaje = mensaje,
+            titulo = titulo,
+            receptor_cliente = receptor_cliente,
+            receptor_mail = receptor_mail
+        )
+        self.instancia_db.add(nuevo_mail)
+        self.commit()
+        pass 
 
     def eliminar(self, id_mail):
-        pass  # Implementar según sea necesario
+        pass  
 
     def modificar(self, id_mail, mail: Mails):
-        pass  # Implementar según sea necesario
+        pass 
 
     def obtener_uno(self, id_mail):
         return self.instancia_db.query(Mails).filter(Mails.id == id_mail).first()
@@ -183,3 +191,20 @@ class ClientesManager(ManagerGral):
 
     def obtener_todos(self):
         return self.instancia_db.query(Clientes).all()
+    
+
+class ParametrosManager(ManagerGral):
+    def crear(self):
+        pass 
+
+    def eliminar(self, id_parametro):
+        pass  
+
+    def modificar(self, id_parametro):
+        pass 
+
+    def obtener_uno(self, id_parametro):
+        return self.instancia_db.query(Parametros).filter(Parametros.id == id_parametro).first()
+
+    def obtener_todos(self):
+        return self.instancia_db.query(Parametros).all()

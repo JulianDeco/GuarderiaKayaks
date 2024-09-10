@@ -105,7 +105,7 @@ class Mails(Base):
     
     cliente = relationship("Clientes", back_populates="mails")
     
-class CantidadPerchas(Base):
-    __tablename__="cantidad_perchas"
+class Parametros(Base):
+    __tablename__="parametros"
     id = Column(Integer, primary_key=True)
-    cantidad = Column(Integer)
+    descripcion = Column(String(200))

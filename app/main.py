@@ -1,4 +1,6 @@
+from datetime import datetime
 from fastapi import FastAPI, Request, Depends, Response, BackgroundTasks
+from sqlalchemy import and_, extract, not_
 from starlette.background import BackgroundTask
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -7,20 +9,24 @@ from fastapi.templating import Jinja2Templates
 from fastapi_utils.tasks import repeat_every
 
 from app.middlewares.middleware import RateLimitingMiddleware
+
 from app.providers.aviso_mail import envio_mail
-from app.providers.consultas import PagosManager
-from app.routes.autenticacion import router as autenticacion
-from app.routes.embarcaciones import router as embarcaciones
-from app.routes.clientes import router as clientes
-from app.routes.pagos import router as pagos
 
-from app.models.models import Base, Clientes, Pagos, SessionLocal, engine
+from app.providers.consultas import PagosManager, ParametrosManager, MailsManager
 
+from app.routes.autenticacion import router as autenticacion_router
+from app.routes.embarcaciones import router as embarcaciones_router
+from app.routes.clientes import router as clientes_router
+from app.routes.pagos import router as pagos_router
+
+from app.models.models import Base, Clientes, Embarcaciones, Pagos, SessionLocal, engine
+
+from app.schemes.schemes import Pago
 from app.security.config_jwt import JWTBearer
 
 from app.custom_logging import CustomizeLogger
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 import logging
 from pathlib import Path
@@ -115,13 +121,16 @@ responses = {
     }
 }
 
-app.include_router(autenticacion, prefix="/v1", responses= responses)
-app.include_router(embarcaciones, dependencies= [Depends(security)], prefix="/v1", responses= responses)
-app.include_router(clientes, dependencies= [Depends(security)], prefix="/v1", responses= responses)
-app.include_router(pagos, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(autenticacion_router, prefix="/v1", responses= responses)
+app.include_router(embarcaciones_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(clientes_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(pagos_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+
 
 def envio_mails_pagos_vencidos(instancia_db):
     pagos = PagosManager(instancia_db)
+    mails = MailsManager(instancia_db)
+    
     lista_pagos_vencidos = pagos.obtener_vencidos()
     logger.info(lista_pagos_vencidos)
         
@@ -136,14 +145,47 @@ def envio_mails_pagos_vencidos(instancia_db):
             logger.info(f"Correo enviado para el pago {pago_vencido.id_pago}")
                     
             pagos.modificar(pago_vencido.id_pago, 1)
+            
+            mails.crear('Aviso Pago', 'Aviso Pago', pago_vencido.cliente.id_cliente, pago_vencido.cliente.mail)
             logger.info('FIN BUCLE')
             
 def creacion_pago(instancia_db):
+    mes_actual = datetime.now().month
+    año_actual = datetime.now().year
+    
     pagos = PagosManager(instancia_db)
     consulta_pagos_mes = pagos.obtener_pagos_mes()
-    logger.info(consulta_pagos_mes) 
-    consulta_cliente = instancia_db.query(Clientes).filter(Clientes.fecha_alta_cliente)
-    pagos.crear()
+    lista_pagos_mes = []
+    if consulta_pagos_mes:
+        lista_pagos_mes = [pago[0] for pago in consulta_pagos_mes]
+    consulta_cliente = (
+    instancia_db.query(Clientes)
+    .options(joinedload(Clientes.embarcaciones))
+    .filter(extract('month', Clientes.fecha_alta_cliente) == mes_actual)
+    .filter(extract('year', Clientes.fecha_alta_cliente) == año_actual)
+    .filter(
+        and_(        
+            not_(Clientes.id_cliente.in_(lista_pagos_mes)),            
+            Embarcaciones.habilitado == 1,                       
+            Embarcaciones.percha.isnot(None)                     
+        )
+    )
+    .join(Embarcaciones)  
+    .all()
+    )
+    logger.info(consulta_cliente)
+    if not consulta_cliente:
+        return
+    consulta_parametros = ParametrosManager(instancia_db)
+    precio_cuota = float(consulta_parametros.obtener_uno(2).descripcion)
+    for cliente in consulta_cliente:
+        logger.info(cliente.__dict__)
+        for embarcacion in cliente.embarcaciones:
+            if embarcacion.tipo_embarcacion.descripcion == 2:
+                monto_pago = precio_cuota * 1.15
+            else:
+                monto_pago = precio_cuota
+            pagos.crear(Pago(monto=monto_pago, id_cliente=cliente.id_cliente))
 
 @app.on_event("startup")
 @repeat_every(seconds=60, raise_exceptions = True)  # 24 horas
