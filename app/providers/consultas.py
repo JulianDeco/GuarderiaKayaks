@@ -107,6 +107,8 @@ class MailsManager(ManagerGral):
 
 class PagosManager(ManagerGral):
     def crear(self, pago: Pago):
+        self.instancia_db.add(Pagos(monto = pago.monto, id_cliente = pago.id_cliente))
+        self.commit()
         pass
 
     def eliminar(self, id_pago):
