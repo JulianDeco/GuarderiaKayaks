@@ -19,6 +19,7 @@ from app.routes.embarcaciones import router as embarcaciones_router
 from app.routes.clientes import router as clientes_router
 from app.routes.pagos import router as pagos_router
 from app.routes.mails import router as mails_router
+from app.routes.parametros import router as parametros_router
 
 from app.models.models import Base, Clientes, Embarcaciones, Pagos, SessionLocal, engine
 
@@ -37,16 +38,12 @@ titulo = "Refugio del Remo"
 descripcion =   "Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT"
 tags_metadata = [
     {
-        "name": "Embarcaciones",
-        "description": "Endpoints relacionados a embarcaciones.",
-    },
-    {
         "name": "Clientes",
         "description": "Endpoints relacionados a clientes.",
     },
     {
-        "name": "Autenticación",
-        "description": "Endpoints relacionados a la autenticación y seguridad del sistema." 
+        "name": "Embarcaciones",
+        "description": "Endpoints relacionados a embarcaciones.",
     },
     {
         "name": "Pagos",
@@ -55,7 +52,15 @@ tags_metadata = [
     {
         "name": "Mails",
         "description": "Endpoints relacionados a los mails." 
-    }
+    },
+    {
+        "name": "Parametros",
+        "description": "Endpoints relacionados a obtención y modificación de parámetros." 
+    },
+    {
+        "name": "Autenticación",
+        "description": "Endpoints relacionados a la autenticación y seguridad del sistema." 
+    },
 ]
 
 security = JWTBearer()
@@ -127,6 +132,7 @@ app.include_router(embarcaciones_router, dependencies= [Depends(security)], pref
 app.include_router(clientes_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(pagos_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(mails_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(parametros_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 
 
 def envio_mails_pagos_vencidos(instancia_db):

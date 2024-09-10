@@ -110,4 +110,9 @@ class EmbarcacionModificacion(BaseModel):
 
     class Config:
         orm_mode = True
-        
+    
+class ParametroModificacion(BaseModel):
+    descripcion: str
+
+    class Config:
+        orm_mode = True

@@ -56,10 +56,10 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
             content=lista_res ,
             status_code= 200
         )
-    res_cliente = consulta_cliente.obtener_uno()
+    res_cliente = consulta_cliente.obtener_uno(id)
     return JSONResponse(
         content= {
-                "id": res_cliente.id,
+                "id": res_cliente.id_cliente,
                 "nombre": res_cliente.nombre,
                 "apellido": res_cliente.apellido,
                 "mail": res_cliente.mail,

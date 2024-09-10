@@ -200,7 +200,15 @@ class ParametrosManager(ManagerGral):
     def eliminar(self, id_parametro):
         pass  
 
-    def modificar(self, id_parametro):
+    def modificar(self, id_parametro, obj_parametro):
+        parametro_actual = self.obtener_uno(id_parametro)
+        if parametro_actual:
+            for key, value in obj_parametro.dict(exclude_unset=True).items():
+                setattr(parametro_actual, key, value)
+            self.commit()
+            self.instancia_db.refresh(parametro_actual)
+            return parametro_actual
+        raise HTTPException(status_code=404, detail="Parametro no encontrado")
         pass 
 
     def obtener_uno(self, id_parametro):
