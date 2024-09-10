@@ -101,7 +101,6 @@ class Mails(Base):
     receptor_cliente = Column(String(400), ForeignKey('clientes.id_cliente'))
     receptor_mail = (String(400))
     fecha_creacion = Column(DateTime, server_default=func.now())
-    fecha_entrega = Column(DateTime, default=None)
     
     cliente = relationship("Clientes", back_populates="mails")
     

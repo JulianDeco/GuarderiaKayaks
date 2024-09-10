@@ -18,6 +18,7 @@ from app.routes.autenticacion import router as autenticacion_router
 from app.routes.embarcaciones import router as embarcaciones_router
 from app.routes.clientes import router as clientes_router
 from app.routes.pagos import router as pagos_router
+from app.routes.mails import router as mails_router
 
 from app.models.models import Base, Clientes, Embarcaciones, Pagos, SessionLocal, engine
 
@@ -125,6 +126,7 @@ app.include_router(autenticacion_router, prefix="/v1", responses= responses)
 app.include_router(embarcaciones_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(clientes_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(pagos_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
+app.include_router(mails_router, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 
 
 def envio_mails_pagos_vencidos(instancia_db):
