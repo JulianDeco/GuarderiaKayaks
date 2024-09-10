@@ -188,12 +188,13 @@ def creacion_pago(instancia_db):
     precio_cuota = float(consulta_parametros.obtener_uno(2).descripcion)
     for cliente in consulta_cliente:
         logger.info(cliente.__dict__)
+        acum_cuota = 0
         for embarcacion in cliente.embarcaciones:
-            if embarcacion.tipo_embarcacion.descripcion == 2:
-                monto_pago = precio_cuota * 1.15
+            if embarcacion.tipo_embarcacion.descripcion == 'DOBLE':
+                acum_cuota += (precio_cuota * 1.15)
             else:
-                monto_pago = precio_cuota
-            pagos.crear(Pago(monto=monto_pago, id_cliente=cliente.id_cliente))
+                acum_cuota += precio_cuota
+        pagos.crear(Pago(monto=acum_cuota, id_cliente=cliente.id_cliente))
 
 @app.on_event("startup")
 @repeat_every(seconds=60, raise_exceptions = True)  # 24 horas

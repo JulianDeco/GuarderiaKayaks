@@ -95,11 +95,11 @@ class Pagos(Base):
     
 class Mails(Base):
     __tablename__ = "mails"
-    id_pago = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id_mail = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     mensaje = Column(String(400))
     titulo = Column(String(200))
     receptor_cliente = Column(String(400), ForeignKey('clientes.id_cliente'))
-    receptor_mail = (String(400))
+    receptor_mail = Column(String(400))
     fecha_creacion = Column(DateTime, server_default=func.now())
     
     cliente = relationship("Clientes", back_populates="mails")

@@ -75,8 +75,17 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
 @router.put('/{id_cliente}')
 async def modifica_cliente(id_cliente: str, ob_cliente: ClienteModificacion = None, db: Session = Depends(get_db)):
     consulta_cliente = ClientesManager(db)
-    consulta_cliente.modificar(ob_cliente, id_cliente)
-    return JSONResponse(content={"detail":"cliente actualizado"}, status_code=200)
+    res_modificacion = consulta_cliente.modificar( id_cliente, ob_cliente)
+    return JSONResponse(content={"resultado":{
+                                    "cliente": res_modificacion.id_cliente,
+                                    "nombre": res_modificacion.nombre,
+                                    "apellido": res_modificacion.apellido,
+                                    "mail": res_modificacion.mail,
+                                    "direccion": res_modificacion.direccion,
+                                    "nro_documento": res_modificacion.nro_documento,
+                                    "tipo_documento": res_modificacion.tipo_documento_rel.descripcion,
+                                    "telefono": res_modificacion.telefono,
+                                    "habilitado":res_modificacion.habilitado}}, status_code=200)
 
 @router.delete("/")
 async def baja_cliente(id_cliente: str, db: Session = Depends(get_db)):

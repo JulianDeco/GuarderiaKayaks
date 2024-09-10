@@ -45,7 +45,7 @@ class ClienteModificacion(BaseModel):
     tipo_documento_id: Optional[int] = None
     nro_documento: Optional[str] = None
     telefono: Optional[str] = None
-    habilitado: Optional[int] = None
+    habilitado: Optional[int] = Field(default=1)
 
     class Config:
         json_schema_extra = {
