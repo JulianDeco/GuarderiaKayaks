@@ -14,7 +14,7 @@ from app.routes.embarcaciones import router as embarcaciones
 from app.routes.clientes import router as clientes
 from app.routes.pagos import router as pagos
 
-from app.models.models import Base, Pagos, SessionLocal, engine
+from app.models.models import Base, Clientes, Pagos, SessionLocal, engine
 
 from app.security.config_jwt import JWTBearer
 
@@ -120,31 +120,37 @@ app.include_router(embarcaciones, dependencies= [Depends(security)], prefix="/v1
 app.include_router(clientes, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 app.include_router(pagos, dependencies= [Depends(security)], prefix="/v1", responses= responses)
 
+def envio_mails_pagos_vencidos(instancia_db):
+    pagos = PagosManager(instancia_db)
+    lista_pagos_vencidos = pagos.obtener_vencidos()
+    logger.info(lista_pagos_vencidos)
+        
+    if lista_pagos_vencidos:
+        for pago_vencido in lista_pagos_vencidos:
+            envio_mail( 
+                    [pago_vencido.cliente.mail], 
+                    "Aviso pago", 
+                    f"{pago_vencido.cliente.nombre} {pago_vencido.cliente.apellido}", 
+                    pago_vencido.fecha_pago
+            )
+            logger.info(f"Correo enviado para el pago {pago_vencido.id_pago}")
+                    
+            pagos.modificar(pago_vencido.id_pago, 1)
+            logger.info('FIN BUCLE')
+            
+def creacion_pago(instancia_db):
+    pagos = PagosManager(instancia_db)
+    consulta_pagos_mes = pagos.obtener_pagos_mes()
+    logger.info(consulta_pagos_mes) 
+    consulta_cliente = instancia_db.query(Clientes).filter(Clientes.fecha_alta_cliente)
+    pagos.crear()
 
 @app.on_event("startup")
 @repeat_every(seconds=60, raise_exceptions = True)  # 24 horas
 def background_tasks() -> None:
     try:
         instancia_db = next(get_db())
-        pagos = PagosManager(instancia_db)
-        lista_pagos_vencidos = pagos.obtener_vencidos()
-        logger.info(lista_pagos_vencidos)
-        
-        if lista_pagos_vencidos:
-            for pago_vencido in lista_pagos_vencidos:
-                try:
-                    envio_mail( 
-                        [pago_vencido.cliente.mail], 
-                        "Aviso pago", 
-                        f"{pago_vencido.cliente.nombre} {pago_vencido.cliente.apellido}", 
-                        pago_vencido.fecha_pago
-                    )
-                    logger.info(f"Correo enviado para el pago {pago_vencido.id_pago}")
-                    
-                    # Modificar el estado de aviso_mail a 1
-                    pagos.modificar(pago_vencido.id_pago, 1)
-                    logger.info('FIN BUCLE')
-                except Exception as e:
-                    logger.error(f"Error enviando mail o modificando el pago {pago_vencido.id_pago}: {e}")
+        creacion_pago(instancia_db)
+        envio_mails_pagos_vencidos(instancia_db)
     except Exception as error:
-        logger.error(f"Error en la tarea de background: {error}")
+        logger.exception(f"Error en la tarea de background: {error}")

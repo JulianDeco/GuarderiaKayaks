@@ -32,10 +32,3 @@ router = APIRouter(prefix="/mails", tags=["Mails"])
 async def obtener_mails(db: Session = Depends(get_db)):
     consulta_mails = MailsManager(db)
     return JSONResponse(consulta_mails.obtener_todos())
-
-@router.post("/", status_code=201)
-async def cargar_cliente(ob_mail: Mail, db: Session = Depends(get_db)):
-    consulta_mail = MailsManager(db)
-    consulta_mail.crear(ob_mail)
-    
-    return JSONResponse(content={"estado":"mail enviado"}, status_code=201, background=None)

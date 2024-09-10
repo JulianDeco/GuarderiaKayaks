@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import datetime
 from typing import Optional
 from fastapi import HTTPException
+from sqlalchemy import extract
 
 from app.models.models import Embarcaciones, Mails, Pagos, Clientes
 from app.schemes.schemes import Cliente, Embarcacion, Pago, ClienteModificacion
@@ -120,6 +121,18 @@ class PagosManager(ManagerGral):
 
     def obtener_todos(self):
         return self.instancia_db.query(Pagos).all()
+
+    def obtener_pagos_mes(self):
+        mes_actual = datetime.datetime.now().month
+        año_actual = datetime.datetime.now().year
+
+        # Realizar la consulta con SQLAlchemy usando extract
+        return (
+            self.instancia_db.query(Pagos.id_cliente)
+            .filter(extract('month', Pagos.fecha_pago) == mes_actual)
+            .filter(extract('year', Pagos.fecha_pago) == año_actual)
+            .all()
+        )
 
     def obtener_vencidos(self):
         return (
