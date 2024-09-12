@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
 from app.models.models import Base, SessionLocal, engine
@@ -74,6 +74,8 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
     
 @router.put('/{id_cliente}')
 async def modifica_cliente(id_cliente: str, ob_cliente: ClienteModificacion = None, db: Session = Depends(get_db)):
+    if not id_cliente:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     consulta_cliente = ClientesManager(db)
     res_modificacion = consulta_cliente.modificar( id_cliente, ob_cliente)
     return JSONResponse(content={"resultado":{
@@ -89,6 +91,8 @@ async def modifica_cliente(id_cliente: str, ob_cliente: ClienteModificacion = No
 
 @router.delete("/")
 async def baja_cliente(id_cliente: str, db: Session = Depends(get_db)):
+    if not id_cliente:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     consulta_cliente = ClientesManager(db)
     consulta_cliente.eliminar(id_cliente)
     return JSONResponse(

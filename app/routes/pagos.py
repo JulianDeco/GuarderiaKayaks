@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
 from typing import Optional
@@ -34,6 +34,8 @@ router = APIRouter(prefix="/pagos", tags=["Pagos"])
 
 @router.post("/{id_pago}")
 async def realizar_pago(id_pago: str, pago: PagoRealizadoScheme,  db: Session = Depends(get_db)):
+    if not id_pago:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     manager = PagosManager(db)
     rta = manager.realizar_pago(id_pago, pago.fecha_pago_realizado)
     return JSONResponse(content= {'estado': 'Pago realizado!'})

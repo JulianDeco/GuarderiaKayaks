@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
 from app.models.models import Base, SessionLocal, engine
@@ -43,6 +43,8 @@ async def obtener_parametros(db: Session = Depends(get_db)):
 
 @router.put("/{id_parametro}")
 async def modificar_parametros(id_parametro: int, parametro: ParametroModificacion, db: Session = Depends(get_db)):
+    if not id_parametro:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     consulta_parametros = ParametrosManager(db)
     resultado = consulta_parametros.modificar(id_parametro, parametro)
     return JSONResponse(content={'resultado': {

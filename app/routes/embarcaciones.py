@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
 from typing import Optional
@@ -42,11 +42,13 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
     if not id:
         try:
             consulta = consulta.obtener_todos()
-            lista_embarcaciones = []
-            if not consulta:
-                return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
-            for embarcacion in consulta:
-                lista_embarcaciones.append({
+        except Exception as error:
+            raise HTTPException(detail={"error": error.args}, status_code=404)
+        lista_embarcaciones = []
+        if not consulta:
+            return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
+        for embarcacion in consulta:
+            lista_embarcaciones.append({
                     'id': embarcacion.id_embarcacion,
                     'modelo':embarcacion.modelo,
                     'marca':embarcacion.marca,
@@ -66,11 +68,13 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
                         "telefono": embarcacion.cliente.telefono,
                         
                     }
-                })
-            return JSONResponse(content={"resultado": lista_embarcaciones})
-        except Exception as error:
-            return JSONResponse(content={"error": error.args}, status_code=404)
-    consulta = consulta.obtener_uno(id)
+            })
+        return JSONResponse(content={"resultado": lista_embarcaciones})
+    try:
+            consulta = consulta.obtener_uno(id)
+    except Exception as error:
+        raise HTTPException(detail={"error": error.args}, status_code=404)
+    
     return JSONResponse(content={"resultado": {
                     'id': consulta.id_embarcacion,
                     'modelo':consulta.modelo,
@@ -95,6 +99,8 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
 
 @router.delete("/")
 async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
+    if not id:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     consulta_embarcacion = EmbarcacionesManager(db)
     consulta_embarcacion.eliminar(id)
     return JSONResponse(
@@ -106,8 +112,13 @@ async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
 
 @router.put("/{id_embarcacion}")
 async def modificar_embarcacion(id_embarcacion: str, embarcacion: EmbarcacionModificacion, db: Session = Depends(get_db)):
+    if not id_embarcacion:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     embarcacion_db = EmbarcacionesManager(db)
-    embarcacion_db = embarcacion_db.modificar(id_embarcacion, embarcacion)
+    try:
+        embarcacion_db = embarcacion_db.modificar(id_embarcacion, embarcacion)
+    except Exception as error:
+        raise HTTPException(detail={"error": error.args}, status_code=404)
     return {"message": "Embarcación actualizada", "embarcacion": {
                     'id': embarcacion_db.id_embarcacion,
                     'modelo':embarcacion_db.modelo,
