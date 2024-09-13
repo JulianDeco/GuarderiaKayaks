@@ -48,6 +48,11 @@ Además comenzó como proyecto para la materia Programación II del 3er año del
     DB_PASS
     DB_PORT
     DB_NAME
+    
+    algorithm
+    secret
+    RESEND_API_KEY
+    API_GMAI
     ```
 
 5. Inicia el servidor uvicorn:
