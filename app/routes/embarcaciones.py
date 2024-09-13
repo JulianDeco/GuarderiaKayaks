@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
 from typing import Optional
 
-from app.models.models_swagger import Embarcacion
+from app.schemes.schemes import Embarcacion, EmbarcacionModificacion
 from app.providers.consultas import EmbarcacionesManager
 from app.models.models import Base, SessionLocal, engine
 
@@ -32,20 +32,122 @@ router = APIRouter(prefix="/embarcaciones", tags=["Embarcaciones"])
 
 @router.post("/")
 async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
-    manager = EmbarcacionesManager(db, embarcacion)
-    rta = manager.crear()
+    try:
+        manager = EmbarcacionesManager(db)
+        rta = manager.crear(embarcacion)
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(status_code=500, detail={"estado":"error durante consulta"})
     return rta
 
 @router.get("/")
-async def listar_embarcacion(id: Optional[int] = None, db: Session = Depends(get_db)) -> JSONResponse:   
-    if id:
-        return
-    return
+async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get_db)) -> JSONResponse:   
+    consulta = EmbarcacionesManager(db)
+    if not id:
+        try:
+            consulta = consulta.obtener_todos()
+        except Exception as error:
+            logger.exception("Error inesperado")
+            raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
+        lista_embarcaciones = []
+        if not consulta:
+            return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
+        for embarcacion in consulta:
+            lista_embarcaciones.append({
+                    'id': embarcacion.id_embarcacion,
+                    'modelo':embarcacion.modelo,
+                    'marca':embarcacion.marca,
+                    'fecha_ingreso': str(embarcacion.fecha_ingreso),
+                    'fecha_baja': str(embarcacion.fecha_baja),
+                    'percha' : embarcacion.percha,
+                    'habilitado': embarcacion.habilitado,
+                    'tipo_kayak': embarcacion.tipo_embarcacion.descripcion,
+                    'color': embarcacion.color,
+                    'cliente': {
+                        "id": embarcacion.cliente.id_cliente,
+                        "nombre": embarcacion.cliente.nombre,
+                        "apellido": embarcacion.cliente.apellido,
+                        "mail": embarcacion.cliente.mail,
+                        "direccion": embarcacion.cliente.direccion,
+                        "nro_documento": embarcacion.cliente.nro_documento,
+                        "telefono": embarcacion.cliente.telefono,
+                        
+                    }
+            })
+        return JSONResponse(content={"resultado": lista_embarcaciones})
+    try:
+            consulta = consulta.obtener_uno(id)
+    except Exception as error:
+        raise HTTPException(detail={"error": error.args}, status_code=404)
+    
+    return JSONResponse(content={"resultado": {
+                    'id': consulta.id_embarcacion,
+                    'modelo':consulta.modelo,
+                    'marca':consulta.marca,
+                    'fecha_ingreso': str(consulta.fecha_ingreso),
+                    'fecha_baja': str(consulta.fecha_baja),
+                    'percha' : consulta.percha,
+                    'habilitado': consulta.habilitado,
+                    'tipo_kayak': consulta.tipo_embarcacion.descripcion,
+                    'color': consulta.color,
+                    'cliente': {
+                        "id": consulta.cliente.id_cliente,
+                        "nombre": consulta.cliente.nombre,
+                        "apellido": consulta.cliente.apellido,
+                        "mail": consulta.cliente.mail,
+                        "direccion": consulta.cliente.direccion,
+                        "nro_documento": consulta.cliente.nro_documento,
+                        "telefono": consulta.cliente.telefono,
+                        
+                    }
+                }})
 
 @router.delete("/")
-async def eliminar_embarcacion(id: int, db: Session = Depends(get_db)):
-    return
+async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
+    if not id:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
+    try:
+        consulta_embarcacion = EmbarcacionesManager(db)
+        consulta_embarcacion.eliminar(id)
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
 
-@router.put("/")
-async def modificar_embarcacion(id: int, db: Session = Depends(get_db)):
-    return
+    return JSONResponse(
+        content={
+            "detalle": "embarcacion eliminado"
+        },
+    status_code=200
+    )
+
+@router.put("/{id_embarcacion}")
+async def modificar_embarcacion(id_embarcacion: str, embarcacion: EmbarcacionModificacion, db: Session = Depends(get_db)):
+    if not id_embarcacion:
+        raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
+    try:
+        embarcacion_db = EmbarcacionesManager(db)
+        embarcacion_db = embarcacion_db.modificar(id_embarcacion, embarcacion)
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
+    return {"message": "Embarcación actualizada", "embarcacion": {
+                    'id': embarcacion_db.id_embarcacion,
+                    'modelo':embarcacion_db.modelo,
+                    'marca':embarcacion_db.marca,
+                    'fecha_ingreso': str(embarcacion_db.fecha_ingreso),
+                    'fecha_baja': str(embarcacion_db.fecha_baja),
+                    'percha' :embarcacion_db.percha,
+                    'habilitado': embarcacion_db.habilitado,
+                    'tipo_kayak': embarcacion_db.tipo_embarcacion.descripcion,
+                    'color': embarcacion_db.color,
+                    'cliente': {
+                        "id": embarcacion_db.cliente.id_cliente,
+                        "nombre": embarcacion_db.cliente.nombre,
+                        "apellido": embarcacion_db.cliente.apellido,
+                        "mail":embarcacion_db.cliente.mail,
+                        "direccion":embarcacion_db.cliente.direccion,
+                        "nro_documento": embarcacion_db.cliente.nro_documento,
+                        "telefono":embarcacion_db.cliente.telefono,
+                        
+                    }
+                }}

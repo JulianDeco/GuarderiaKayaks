@@ -1,0 +1,3036 @@
+{
+	"info": {
+		"_postman_id": "56b0b860-4c31-47cd-a49e-b3fa1cb998fc",
+		"name": "Refugio del Remo",
+		"description": "Sistema para carga de clientes y kayaks de clientes, además de login de los operarios del sistema con autenticación JWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23249675"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "Autenticaciones",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "asas",
+											"description": "(Required) "
+										},
+										{
+											"key": "password",
+											"value": "as",
+											"description": "(Required) "
+										},
+										{
+											"key": "grant_type",
+											"value": "<string>",
+											"disabled": true
+										},
+										{
+											"key": "scope",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "<string>",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "<string>",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "username",
+													"value": "<string>",
+													"description": "(Required) "
+												},
+												{
+													"key": "password",
+													"value": "<string>",
+													"description": "(Required) "
+												},
+												{
+													"key": "grant_type",
+													"value": "<string>"
+												},
+												{
+													"key": "scope",
+													"value": ""
+												},
+												{
+													"key": "client_id",
+													"value": "<string>"
+												},
+												{
+													"key": "client_secret",
+													"value": "<string>"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://localhost:8000/v1/auth/login",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "username",
+													"value": "<string>",
+													"description": "(Required) "
+												},
+												{
+													"key": "password",
+													"value": "<string>",
+													"description": "(Required) "
+												},
+												{
+													"key": "grant_type",
+													"value": "<string>"
+												},
+												{
+													"key": "scope",
+													"value": ""
+												},
+												{
+													"key": "client_id",
+													"value": "<string>"
+												},
+												{
+													"key": "client_secret",
+													"value": "<string>"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Login",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/x-www-form-urlencoded"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "username",
+													"value": "asas",
+													"description": "(Required) "
+												},
+												{
+													"key": "password",
+													"value": "as",
+													"description": "(Required) "
+												},
+												{
+													"key": "grant_type",
+													"value": "<string>",
+													"disabled": true
+												},
+												{
+													"key": "scope",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "client_id",
+													"value": "<string>",
+													"disabled": true
+												},
+												{
+													"key": "client_secret",
+													"value": "<string>",
+													"disabled": true
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:16:00 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "190"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM\",\n    \"token_type\": \"bearer\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Clientes",
+					"item": [
+						{
+							"name": "Cargar Cliente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nombre\": \"Sebastian\",\n  \"apellido\": \"Bruselario\",\n  \"mail\": \"juliandecopp2@gmail.com\",\n  \"direccion\": \"Juan Jose Paso 2134\",\n  \"tipo_documento_id\": \"1\",\n  \"nro_documento\": \"43491145\",\n  \"telefono\": \"3416109098\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/clientes/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clientes",
+										""
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nombre\": \"<string>\",\n  \"apellido\": \"<string>\",\n  \"mail\": \"<string>\",\n  \"direccion\": \"<string>\",\n  \"tipo_documento_id\": \"<integer>\",\n  \"nro_documento\": \"<string>\",\n  \"telefono\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8000/v1/clientes/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"clientes",
+												""
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nombre\": \"<string>\",\n  \"apellido\": \"<string>\",\n  \"mail\": \"<string>\",\n  \"direccion\": \"<string>\",\n  \"tipo_documento_id\": \"<integer>\",\n  \"nro_documento\": \"<string>\",\n  \"telefono\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Error durante consulta",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nombre\": \"Sebastian\",\n  \"apellido\": \"Bruselario\",\n  \"mail\": \"juliandecopp@gmail.com\",\n  \"direccion\": \"Juan Jose Paso 2134\",\n  \"tipo_documento_id\": \"1\",\n  \"nro_documento\": \"43491145\",\n  \"telefono\": \"3416109098\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:37:13 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "42"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"estado\": \"error durante consulta a bbdd\"\n}"
+								},
+								{
+									"name": "Succesful Response",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nombre\": \"Sebastian\",\n  \"apellido\": \"Bruselario\",\n  \"mail\": \"juliandecopp2@gmail.com\",\n  \"direccion\": \"Juan Jose Paso 2134\",\n  \"tipo_documento_id\": \"1\",\n  \"nro_documento\": \"43491145\",\n  \"telefono\": \"3416109098\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:38:12 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "27"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"estado\": \"cliente creado\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Listar Clientes",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clientes/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clientes",
+										""
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:8000/v1/clientes/?id=<string>",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response sin ID",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:42:05 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "750"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": \"0ba57369-cb10-4db6-ae24-b96f3e077f4d\",\n        \"nombre\": \"Sebastian\",\n        \"apellido\": \"Bruselario\",\n        \"mail\": \"juliandecopp2@gmail.com\",\n        \"direccion\": \"Juan Jose Paso 2134\",\n        \"nro_documento\": \"43491145\",\n        \"tipo_documento\": \"DNI\",\n        \"telefono\": \"3416109098\",\n        \"habilitado\": 1\n    },\n    {\n        \"id\": \"74fc020a-d522-4609-87ea-3c9204de7bdb\",\n        \"nombre\": \"Sebastian\",\n        \"apellido\": \"Bruselario\",\n        \"mail\": \"juliandecopp@gmail.com\",\n        \"direccion\": \"Juan Jose Paso 2134\",\n        \"nro_documento\": \"43491145\",\n        \"tipo_documento\": \"DNI\",\n        \"telefono\": \"3416109098\",\n        \"habilitado\": 1\n    },\n    {\n        \"id\": \"7f7559ac-f2c8-4eaf-a916-1bc17b86a34f\",\n        \"nombre\": \"Julian\",\n        \"apellido\": \"Decoppet\",\n        \"mail\": \"juliandecoppet@gmail.com\",\n        \"direccion\": \"Calle Falsa 123, Ciudad, País\",\n        \"nro_documento\": \"3416109098\",\n        \"tipo_documento\": \"DNI\",\n        \"telefono\": \"3411111111\",\n        \"habilitado\": 1\n    }\n]"
+								},
+								{
+									"name": "Successful Response con ID",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/?id=0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "0ba57369-cb10-4db6-ae24-b96f3e077f4d"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:42:41 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "246"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"0ba57369-cb10-4db6-ae24-b96f3e077f4d\",\n    \"nombre\": \"Sebastian\",\n    \"apellido\": \"Bruselario\",\n    \"mail\": \"juliandecopp2@gmail.com\",\n    \"direccion\": \"Juan Jose Paso 2134\",\n    \"nro_documento\": \"43491145\",\n    \"tipo_documento\": \"DNI\",\n    \"telefono\": \"3416109098\",\n    \"habilitado\": 1\n}"
+								}
+							]
+						},
+						{
+							"name": "Baja Cliente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clientes/?id_cliente=0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clientes",
+										""
+									],
+									"query": [
+										{
+											"key": "id_cliente",
+											"value": "0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:8000/v1/clientes/?id_cliente=<string>",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id_cliente",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/?id_cliente=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id_cliente",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/?id_cliente=0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												""
+											],
+											"query": [
+												{
+													"key": "id_cliente",
+													"value": "0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:46:03 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "31"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"detalle\": \"cliente eliminado\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Modifica Cliente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"nombre\": \"Sebastian\",\n        \"apellido\": \"Bruselario\",\n        \"mail\": \"julian.decoppet@institutozonaoeste.edu.ar\",\n        \"direccion\": \"Juan Jose Paso 2134\",\n        \"nro_documento\": \"43491145\",\n        \"tipo_documento\": \"DNI\",\n        \"telefono\": \"3416109098\",\n        \"habilitado\": 1\n}\n    ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/clientes/:id_cliente",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clientes",
+										":id_cliente"
+									],
+									"variable": [
+										{
+											"key": "id_cliente",
+											"value": "0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nombre\": \"<string>\",\n  \"apellido\": \"<string>\",\n  \"mail\": \"<string>\",\n  \"direccion\": \"<string>\",\n  \"tipo_documento_id\": \"<integer>\",\n  \"nro_documento\": \"<string>\",\n  \"telefono\": \"<string>\",\n  \"habilitado\": \"<integer>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/:id_cliente",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												":id_cliente"
+											],
+											"variable": [
+												{
+													"key": "id_cliente",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nombre\": \"<string>\",\n  \"apellido\": \"<string>\",\n  \"mail\": \"<string>\",\n  \"direccion\": \"<string>\",\n  \"tipo_documento_id\": \"<integer>\",\n  \"nro_documento\": \"<string>\",\n  \"telefono\": \"<string>\",\n  \"habilitado\": \"<integer>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/:id_cliente",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												":id_cliente"
+											],
+											"variable": [
+												{
+													"key": "id_cliente",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n        \"nombre\": \"Sebastian\",\n        \"apellido\": \"Bruselario\",\n        \"mail\": \"julian.decoppet@institutozonaoeste.edu.ar\",\n        \"direccion\": \"Juan Jose Paso 2134\",\n        \"nro_documento\": \"43491145\",\n        \"tipo_documento\": \"DNI\",\n        \"telefono\": \"3416109098\",\n        \"habilitado\": 1\n}\n    ",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clientes/:id_cliente",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clientes",
+												":id_cliente"
+											],
+											"variable": [
+												{
+													"key": "id_cliente",
+													"value": "0ba57369-cb10-4db6-ae24-b96f3e077f4d",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:47:54 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "283"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"resultado\": {\n        \"cliente\": \"0ba57369-cb10-4db6-ae24-b96f3e077f4d\",\n        \"nombre\": \"Sebastian\",\n        \"apellido\": \"Bruselario\",\n        \"mail\": \"julian.decoppet@institutozonaoeste.edu.ar\",\n        \"direccion\": \"Juan Jose Paso 2134\",\n        \"nro_documento\": \"43491145\",\n        \"tipo_documento\": \"DNI\",\n        \"telefono\": \"3416109098\",\n        \"habilitado\": 1\n    }\n}"
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYyMDEwNjAuNzgzMzQwNywicm9sIjoiYWRtaW4ifQ.ODysYtnUWb3GW4_cdayR2K4KCYcvT4v20wAO7fmkcC",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Embarcaciones",
+					"item": [
+						{
+							"name": "Cargar Embarcacion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tipo_id\": \"<integer>\",\n  \"marca\": \"<string>\",\n  \"modelo\": \"<string>\",\n  \"color\": \"<string>\",\n  \"año_ingreso\": \"<date>\",\n  \"percha\": \"<integer>\",\n  \"id_cliente\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/embarcaciones/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"embarcaciones",
+										""
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tipo_id\": \"<integer>\",\n  \"marca\": \"<string>\",\n  \"modelo\": \"<string>\",\n  \"color\": \"<string>\",\n  \"año_ingreso\": \"<date>\",\n  \"percha\": \"<integer>\",\n  \"id_cliente\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8000/v1/embarcaciones/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								},
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tipo_id\": \"<integer>\",\n  \"marca\": \"<string>\",\n  \"modelo\": \"<string>\",\n  \"color\": \"<string>\",\n  \"año_ingreso\": \"<date>\",\n  \"percha\": \"<integer>\",\n  \"id_cliente\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tipo_id\": \"<integer>\",\n  \"marca\": \"<string>\",\n  \"modelo\": \"<string>\",\n  \"color\": \"<string>\",\n  \"año_ingreso\": \"<date>\",\n  \"percha\": \"<integer>\",\n  \"id_cliente\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Listar Embarcacion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/embarcaciones/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"embarcaciones",
+										""
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:49:05 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "877"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"resultado\": [\n        {\n            \"id\": \"6b1ac204-8551-4e3c-97ca-00bf84f8ae36\",\n            \"modelo\": \"SDK-510\",\n            \"marca\": \"Baum\",\n            \"fecha_ingreso\": \"2024-09-09 22:55:05\",\n            \"fecha_baja\": \"None\",\n            \"percha\": 12,\n            \"habilitado\": 1,\n            \"tipo_kayak\": \"DOBLE\",\n            \"color\": \"Negro\",\n            \"cliente\": {\n                \"id\": \"7f7559ac-f2c8-4eaf-a916-1bc17b86a34f\",\n                \"nombre\": \"Julian\",\n                \"apellido\": \"Decoppet\",\n                \"mail\": \"juliandecoppet@gmail.com\",\n                \"direccion\": \"Calle Falsa 123, Ciudad, País\",\n                \"nro_documento\": \"3416109098\",\n                \"telefono\": \"3411111111\"\n            }\n        },\n        {\n            \"id\": \"f9a65f42-a975-4c58-9cbd-688923ffb70f\",\n            \"modelo\": \"Weir\",\n            \"marca\": \"Churrasco\",\n            \"fecha_ingreso\": \"2024-08-30 09:01:47\",\n            \"fecha_baja\": \"None\",\n            \"percha\": 15,\n            \"habilitado\": 1,\n            \"tipo_kayak\": \"SIMPLE\",\n            \"color\": \"Rojo\",\n            \"cliente\": {\n                \"id\": \"7f7559ac-f2c8-4eaf-a916-1bc17b86a34f\",\n                \"nombre\": \"Julian\",\n                \"apellido\": \"Decoppet\",\n                \"mail\": \"juliandecoppet@gmail.com\",\n                \"direccion\": \"Calle Falsa 123, Ciudad, País\",\n                \"nro_documento\": \"3416109098\",\n                \"telefono\": \"3411111111\"\n            }\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Eliminar Embarcacion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/embarcaciones/?id=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"embarcaciones",
+										""
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "<string>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:8000/v1/embarcaciones/?id=<string>",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								},
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Modificar Embarcacion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"modelo\": \"SDK-511\",\n            \"marca\": \"Baum\",\n            \"percha\": 12,\n            \"habilitado\": 1,\n            \"tipo_kayak\": \"DOBLE\",\n            \"color\": \"Amarillo\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/embarcaciones/:id_embarcacion",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"embarcaciones",
+										":id_embarcacion"
+									],
+									"variable": [
+										{
+											"key": "id_embarcacion",
+											"value": "6b1ac204-8551-4e3c-97ca-00bf84f8ae36",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tipo_id\": \"<integer>\",\n  \"marca\": \"<string>\",\n  \"modelo\": \"<string>\",\n  \"color\": \"<string>\",\n  \"percha\": \"<integer>\",\n  \"id_cliente\": \"<string>\",\n  \"habilitado\": \"<integer>\",\n  \"fecha_baja\": \"<dateTime>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/:id_embarcacion",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												":id_embarcacion"
+											],
+											"variable": [
+												{
+													"key": "id_embarcacion",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tipo_id\": \"<integer>\",\n  \"marca\": \"<string>\",\n  \"modelo\": \"<string>\",\n  \"color\": \"<string>\",\n  \"percha\": \"<integer>\",\n  \"id_cliente\": \"<string>\",\n  \"habilitado\": \"<integer>\",\n  \"fecha_baja\": \"<dateTime>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/:id_embarcacion",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												":id_embarcacion"
+											],
+											"variable": [
+												{
+													"key": "id_embarcacion",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n            \"modelo\": \"SDK-511\",\n            \"marca\": \"Baum\",\n            \"percha\": 12,\n            \"habilitado\": 1,\n            \"tipo_kayak\": \"DOBLE\",\n            \"color\": \"Amarillo\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/embarcaciones/:id_embarcacion",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"embarcaciones",
+												":id_embarcacion"
+											],
+											"variable": [
+												{
+													"key": "id_embarcacion",
+													"value": "6b1ac204-8551-4e3c-97ca-00bf84f8ae36",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:51:27 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "485"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Embarcación actualizada\",\n    \"embarcacion\": {\n        \"id\": \"6b1ac204-8551-4e3c-97ca-00bf84f8ae36\",\n        \"modelo\": \"SDK-511\",\n        \"marca\": \"Baum\",\n        \"fecha_ingreso\": \"2024-09-09 22:55:05\",\n        \"fecha_baja\": \"None\",\n        \"percha\": 12,\n        \"habilitado\": 1,\n        \"tipo_kayak\": \"DOBLE\",\n        \"color\": \"Amarillo\",\n        \"cliente\": {\n            \"id\": \"7f7559ac-f2c8-4eaf-a916-1bc17b86a34f\",\n            \"nombre\": \"Julian\",\n            \"apellido\": \"Decoppet\",\n            \"mail\": \"juliandecoppet@gmail.com\",\n            \"direccion\": \"Calle Falsa 123, Ciudad, País\",\n            \"nro_documento\": \"3416109098\",\n            \"telefono\": \"3411111111\"\n        }\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Pagos",
+					"item": [
+						{
+							"name": "Listar Pagos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/pagos/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"pagos",
+										""
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "<string>",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/pagos/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"pagos",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/pagos/?id=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"pagos",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/pagos/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"pagos",
+												""
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "<string>",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:52:04 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "335"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"resultado\": [\n        {\n            \"id\": \"ef2e3fc3-7017-4950-a292-49b0a0695b22\",\n            \"monto\": 32250,\n            \"fecha\": \"2024-09-10 08:37:49\",\n            \"cliente\": {\n                \"id\": \"7f7559ac-f2c8-4eaf-a916-1bc17b86a34f\",\n                \"nombre\": \"Julian\",\n                \"apellido\": \"Decoppet\",\n                \"mail\": \"juliandecoppet@gmail.com\",\n                \"direccion\": \"Calle Falsa 123, Ciudad, País\",\n                \"nro_documento\": \"3416109098\",\n                \"telefono\": \"3411111111\"\n            }\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Realizar Pago",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"fecha_pago_realizado\": \"2024-09-12 23:53\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/pagos/:id_pago",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"pagos",
+										":id_pago"
+									],
+									"variable": [
+										{
+											"key": "id_pago",
+											"value": "ef2e3fc3-7017-4950-a292-49b0a0695b22",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"fecha_pago_realizado\": \"<dateTime>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/pagos/:id_pago",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"pagos",
+												":id_pago"
+											],
+											"variable": [
+												{
+													"key": "id_pago",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"fecha_pago_realizado\": \"<dateTime>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/pagos/:id_pago",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"pagos",
+												":id_pago"
+											],
+											"variable": [
+												{
+													"key": "id_pago",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"fecha_pago_realizado\": \"2024-09-12 23:53\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/pagos/:id_pago",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"pagos",
+												":id_pago"
+											],
+											"variable": [
+												{
+													"key": "id_pago",
+													"value": "ef2e3fc3-7017-4950-a292-49b0a0695b22",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:53:38 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "28"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"estado\": \"Pago realizado!\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Parametros",
+					"item": [
+						{
+							"name": "Obtener Parametros",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/parametros/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"parametros",
+										""
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/parametros/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"parametros",
+												""
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/parametros/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"parametros",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:52:30 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "76"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"parametros\": [\n        {\n            \"id\": 1,\n            \"descripcion\": \"720\"\n        },\n        {\n            \"id\": 2,\n            \"descripcion\": \"15000\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Modificar Parametros",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"descripcion\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/parametros/:id_parametro",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"parametros",
+										":id_parametro"
+									],
+									"variable": [
+										{
+											"key": "id_parametro",
+											"value": "<integer>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"descripcion\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/parametros/:id_parametro",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"parametros",
+												":id_parametro"
+											],
+											"variable": [
+												{
+													"key": "id_parametro",
+													"value": "<integer>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								},
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"descripcion\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/parametros/:id_parametro",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"parametros",
+												":id_parametro"
+											],
+											"variable": [
+												{
+													"key": "id_parametro",
+													"value": "<integer>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Validation Error",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"descripcion\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/parametros/:id_parametro",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"parametros",
+												":id_parametro"
+											],
+											"variable": [
+												{
+													"key": "id_parametro",
+													"value": "<integer>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+									"code": 422,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"loc\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"msg\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Mails",
+					"item": [
+						{
+							"name": "Obtener Mails",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/mails/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"mails",
+										""
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Not authenticated",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer <token>",
+												"description": "Added as a part of security scheme: bearer"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/mails/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"mails",
+												""
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"detail\": \"Not authenticated\"\n}"
+								},
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/mails/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"mails",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Fri, 13 Sep 2024 02:55:03 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "246"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"resultado\": [\n        {\n            \"id_mail\": \"233034c1-72ca-4756-a017-2392ebf92bdd\",\n            \"mensaje\": \"Aviso Pago\",\n            \"titulo\": \"Aviso Pago\",\n            \"id_receptor\": \"7f7559ac-f2c8-4eaf-a916-1bc17b86a34f\",\n            \"mail_receptor\": \"juliandecoppet@gmail.com\",\n            \"fecha_creacion\": \"2024-09-10 08:37:52\"\n        }\n    ]\n}"
+								}
+							]
+						}
+					]
+				}
+			],
+			"description": "Versión 1 de la API"
+		},
+		{
+			"name": "Pong",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/ping",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Successful Response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ping",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "bearerToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYyMDE0NTQuNDM4MzQyNiwicm9sIjoiYWRtaW4ifQ.lYu8EbifteVGAcqK31ZrhjXZl2B2CclSIc6H50IiwSM",
+			"type": "string"
+		}
+	]
+}

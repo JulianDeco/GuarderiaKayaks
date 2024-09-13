@@ -22,7 +22,10 @@ class BaseDeDatos():
         try:
             engine = create_engine(
                 SQLALCHEMY_DATABASE_URL,
-                pool_recycle=3600 
+                pool_recycle=3600,
+                echo_pool=True,
+                echo=True,
+                pool_timeout=30,
             )
             SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
             Base = declarative_base()
