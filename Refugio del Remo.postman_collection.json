@@ -307,7 +307,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM",
+											"value": {{bearerToken}},
 											"type": "string"
 										}
 									]
@@ -527,7 +527,7 @@
 											},
 											{
 												"key": "Authorization",
-												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjYxOTk3NjEuMTY0NjQyLCJyb2wiOiJhZG1pbiJ9.0GZASOrukbC1758LTYbLehIg9cuQO__67w6bYh-yZVM",
+												"value": {{bearerToken}},
 												"type": "text"
 											}
 										],
