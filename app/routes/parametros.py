@@ -31,8 +31,13 @@ router = APIRouter(prefix="/parametros", tags=["Parametros"])
 
 @router.get("/")
 async def obtener_parametros(db: Session = Depends(get_db)):
-    consulta_parametros = ParametrosManager(db)
-    consulta_parametros = consulta_parametros.obtener_todos()
+    try:
+        consulta_parametros = ParametrosManager(db)
+        consulta_parametros = consulta_parametros.obtener_todos()
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
+    
     lista_parametros = []
     for params in consulta_parametros:
         lista_parametros.append({
@@ -45,8 +50,13 @@ async def obtener_parametros(db: Session = Depends(get_db)):
 async def modificar_parametros(id_parametro: int, parametro: ParametroModificacion, db: Session = Depends(get_db)):
     if not id_parametro:
         raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
-    consulta_parametros = ParametrosManager(db)
-    resultado = consulta_parametros.modificar(id_parametro, parametro)
+    try:
+        consulta_parametros = ParametrosManager(db)
+        resultado = consulta_parametros.modificar(id_parametro, parametro)
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
+    
     return JSONResponse(content={'resultado': {
         'id': resultado.id,
         'descripcion': resultado.descripcion

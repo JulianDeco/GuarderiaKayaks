@@ -1,8 +1,8 @@
 from datetime import datetime
-from fastapi import FastAPI, Request, Depends, Response, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Request, Depends, Response, BackgroundTasks
 from sqlalchemy import and_, extract, not_
 from starlette.background import BackgroundTask
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -195,6 +195,11 @@ def creacion_pago(instancia_db):
             else:
                 acum_cuota += precio_cuota
         pagos.crear(Pago(monto=acum_cuota, id_cliente=cliente.id_cliente))
+
+@app.exception_handler(500)
+async def HTTPException_exception_handler(request: Request, exc: HTTPException):
+    logger.info(exc.args)
+    return JSONResponse(content={"estado":"error durante consulta a bbdd"}, status_code=500)
 
 @app.on_event("startup")
 @repeat_every(seconds=60, raise_exceptions = True)  # 24 horas

@@ -36,8 +36,13 @@ router = APIRouter(prefix="/pagos", tags=["Pagos"])
 async def realizar_pago(id_pago: str, pago: PagoRealizadoScheme,  db: Session = Depends(get_db)):
     if not id_pago:
         raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
-    manager = PagosManager(db)
-    rta = manager.realizar_pago(id_pago, pago.fecha_pago_realizado)
+    try:
+        manager = PagosManager(db)
+        rta = manager.realizar_pago(id_pago, pago.fecha_pago_realizado)
+    except Exception as error:
+        logger.exception()
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
+    
     return JSONResponse(content= {'estado': 'Pago realizado!'})
 
 @router.get("/")
@@ -68,7 +73,7 @@ async def listar_pagos(id: Optional[str] = None, db: Session = Depends(get_db)) 
             return JSONResponse(content={"resultado": lista_pagos})
         except Exception as error:
             logger.exception(error)
-            return JSONResponse(content={"error": error.args}, status_code=404)
+            return JSONResponse(content={"estado": "error durante consulta"}, status_code=500)
     consulta = consulta.obtener_uno(id)
     return JSONResponse(content={"resultado": {
                     'id': consulta.id_pago,

@@ -32,8 +32,12 @@ router = APIRouter(prefix="/embarcaciones", tags=["Embarcaciones"])
 
 @router.post("/")
 async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get_db)):
-    manager = EmbarcacionesManager(db)
-    rta = manager.crear(embarcacion)
+    try:
+        manager = EmbarcacionesManager(db)
+        rta = manager.crear(embarcacion)
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(status_code=500, detail={"estado":"error durante consulta"})
     return rta
 
 @router.get("/")
@@ -43,7 +47,8 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
         try:
             consulta = consulta.obtener_todos()
         except Exception as error:
-            raise HTTPException(detail={"error": error.args}, status_code=404)
+            logger.exception("Error inesperado")
+            raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
         lista_embarcaciones = []
         if not consulta:
             return JSONResponse(content={"estado": "No existen registros"}, status_code=200)
@@ -101,8 +106,13 @@ async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get
 async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
     if not id:
         raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
-    consulta_embarcacion = EmbarcacionesManager(db)
-    consulta_embarcacion.eliminar(id)
+    try:
+        consulta_embarcacion = EmbarcacionesManager(db)
+        consulta_embarcacion.eliminar(id)
+    except Exception as error:
+        logger.exception("Error inesperado")
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
+
     return JSONResponse(
         content={
             "detalle": "embarcacion eliminado"
@@ -114,11 +124,12 @@ async def eliminar_embarcacion(id: str, db: Session = Depends(get_db)):
 async def modificar_embarcacion(id_embarcacion: str, embarcacion: EmbarcacionModificacion, db: Session = Depends(get_db)):
     if not id_embarcacion:
         raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
-    embarcacion_db = EmbarcacionesManager(db)
     try:
+        embarcacion_db = EmbarcacionesManager(db)
         embarcacion_db = embarcacion_db.modificar(id_embarcacion, embarcacion)
     except Exception as error:
-        raise HTTPException(detail={"error": error.args}, status_code=404)
+        logger.exception("Error inesperado")
+        raise HTTPException(detail={"estado": "error durante consulta"}, status_code=500)
     return {"message": "Embarcación actualizada", "embarcacion": {
                     'id': embarcacion_db.id_embarcacion,
                     'modelo':embarcacion_db.modelo,
