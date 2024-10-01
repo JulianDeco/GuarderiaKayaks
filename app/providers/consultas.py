@@ -222,7 +222,7 @@ class UsuariosManager(ManagerGral):
             return False
         
         token = secrets.token_hex(16)
-        token_usuario = Usuario_Token(mail =user.mail, token = token)        
+        token_usuario = Usuario_Token(mail =user.mail, token = token, expira_en = str(datetime.datetime.now() + datetime.timedelta(minutes=30)))        
         self.instancia_db.add(token_usuario)
         self.instancia_db.commit()
 

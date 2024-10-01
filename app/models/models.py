@@ -111,11 +111,14 @@ class Parametros(Base):
     id = Column(Integer, primary_key=True)
     descripcion = Column(String(200))
     
+    
+def fecha_token():
+    return str(datetime.datetime.now() + datetime.timedelta(minutes=30))
 class Usuario_Token(Base):
     __tablename__ = "usuarios_token"
     id = Column(Integer, primary_key = True, autoincrement= True)
     mail = Column(String(36), ForeignKey('usuario_sistema.mail'))
     token = Column(String(36))
-    expira_en = Column(DateTime, server_default=str(datetime.datetime.now() + datetime.timedelta(minutes=30)))
+    expira_en = Column(DateTime, default=None)
     
     usuario_token = relationship("UsuarioSistema", back_populates="tokens")
