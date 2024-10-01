@@ -1,4 +1,5 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float, DECIMAL, DateTime
+import datetime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Uuid, Date, Float, DECIMAL, DateTime, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -36,13 +37,14 @@ class UsuarioSistema(Base):
     nombre = Column(String(250))
     apellido = Column(String(250))
     rol = Column(Integer, ForeignKey('roles.id'))
-    mail = Column(String(250), unique=True)
+    mail = Column(String(250), unique=True, index=True)
     contraseña = Column(String(250))
     tipo_documento_id = Column(Integer, ForeignKey('tipo_documento.id'))
     nro_documento = Column(String(250))
 
     rol_rel = relationship("Rol", back_populates="usuarios_sistema")
     tipo_documento_rel = relationship("TipoDocumento", back_populates="usuarios_sistema")
+    tokens = relationship("Usuario_Token", back_populates="usuario_token")
 
 class Clientes(Base):
     __tablename__ = "clientes"
@@ -108,3 +110,12 @@ class Parametros(Base):
     __tablename__="parametros"
     id = Column(Integer, primary_key=True)
     descripcion = Column(String(200))
+    
+class Usuario_Token(Base):
+    __tablename__ = "usuarios_token"
+    id = Column(Integer, primary_key = True, autoincrement= True)
+    mail = Column(String(36), ForeignKey('usuario_sistema.mail'))
+    token = Column(String(36))
+    expira_en = Column(DateTime, server_default=str(datetime.datetime.now() + datetime.timedelta(minutes=30)))
+    
+    usuario_token = relationship("UsuarioSistema", back_populates="tokens")
