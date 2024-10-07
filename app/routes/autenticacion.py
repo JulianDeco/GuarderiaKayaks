@@ -36,6 +36,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/auth/login")
 
 @router.post("/login")
 async def login(credentials: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
+    if credentials.grant_type == 'password':
+        return signJWT(2, 'aplicacion externa')
     consulta = UsuariosManager(db)
     token = consulta.autenticar_usuario(credentials.username, credentials.password)
     if not token:

@@ -25,7 +25,7 @@ def get_db():
     finally: 
         db.close()
 
-class JWTBearer(HTTPBearer):
+class TokenBearer(HTTPBearer):
     def __init__(self, description: Annotated[
             Optional[str],
             Doc(
@@ -36,15 +36,19 @@ class JWTBearer(HTTPBearer):
                 """
             ),
         ] = None,auto_error: bool = True):
-        super(JWTBearer, self).__init__(auto_error=auto_error)
+        super(TokenBearer, self).__init__(auto_error=auto_error)
 
     async def __call__(self, request: Request):
-        credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+        credentials: HTTPAuthorizationCredentials = await super(TokenBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            if not self.verificar_token(credentials.credentials):
-                raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+            if len(credentials.credentials) < 32:
+                if not self.verificar_token(credentials.credentials):
+                    raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+            else:
+                if not self.verify_jwt(credentials.credentials):
+                    raise HTTPException(status_code=403, detail="Invalid token or expired token.")
             return credentials.credentials
         raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
@@ -53,6 +57,7 @@ class JWTBearer(HTTPBearer):
 
         try:
             payload = decodeJWT(jwtoken)
+            print(payload)
         except:
             payload = None
         if payload:

@@ -24,7 +24,7 @@ from app.routes.parametros import router as parametros_router
 from app.models.models import Base, Clientes, Embarcaciones, Pagos, SessionLocal, engine
 
 from app.schemes.schemes import Pago
-from app.security.config_jwt import JWTBearer
+from app.security.config_jwt import TokenBearer
 
 from app.custom_logging import CustomizeLogger
 
@@ -63,7 +63,7 @@ tags_metadata = [
     },
 ]
 
-security = JWTBearer()
+security = TokenBearer()
 
 app = FastAPI(title = titulo, 
               description=descripcion , 
