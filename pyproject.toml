@@ -19,6 +19,7 @@ loguru = "^0.7.2"
 resend = "^2.4.0"
 fastapi-utils = "^0.7.0"
 typing-inspect = "^0.9.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]

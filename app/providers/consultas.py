@@ -1,11 +1,15 @@
+import os
 from abc import ABC, abstractmethod
 import datetime
+import secrets
 from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy import extract
 
-from app.models.models import Embarcaciones, Mails, Pagos, Clientes, Parametros
-from app.schemes.schemes import Cliente, Embarcacion, Pago, ClienteModificacion
+from passlib.context import CryptContext
+
+from app.models.models import Embarcaciones, Mails, Pagos, Clientes, Parametros, Usuario_Token, UsuarioSistema
+from app.schemes.schemes import Cliente, CrearUsuario, Embarcacion, Pago, ClienteModificacion
 
 class ManagerGral(ABC):
     """Gestión general para todas las entidades"""
@@ -197,7 +201,62 @@ class ClientesManager(ManagerGral):
 
     def obtener_todos(self):
         return self.instancia_db.query(Clientes).all()
+
+class UsuariosManager(ManagerGral):
     
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    
+    def verificar_contraseña(self, plain_password, hashed_password):
+        return self.pwd_context.verify(plain_password, hashed_password)
+
+
+    def obtener_hash_contraseña(self, password):
+        return self.pwd_context.hash(password)
+    
+    def autenticar_usuario(self, mail: str, password: str):
+        user = self.obtener_uno(mail)
+        print(user)
+        if not user:
+            return False
+        if not self.verificar_contraseña(password, user.contraseña):
+            return False
+        
+        token = secrets.token_hex(16)
+        token_usuario = Usuario_Token(mail =user.mail, token = token, expira_en = str(datetime.datetime.now() + datetime.timedelta(minutes=30)))        
+        self.instancia_db.add(token_usuario)
+        self.instancia_db.commit()
+
+        return token
+    
+    def crear(self, objeto: CrearUsuario):
+        
+        objeto.contraseña = self.pwd_context.hash(objeto.contraseña)
+        
+        nuevo_usuario = UsuarioSistema(
+            nombre = objeto.nombre,
+            apellido = objeto.apellido,
+            rol = objeto.rol,
+            mail = objeto.mail,
+            contraseña = objeto.contraseña,
+            tipo_documento_id = objeto.tipo_documento_id,
+            nro_documento = objeto.nro_documento
+            )
+        self.instancia_db.add(nuevo_usuario)
+        self.commit()
+        return
+    
+    def eliminar(self):
+        pass
+    
+    def modificar(self):
+        pass
+    
+    def obtener_uno(self, mail):
+        return self.instancia_db.query(UsuarioSistema).filter(UsuarioSistema.mail == mail).first()
+    
+    
+    def obtener_todos(self):
+        pass
 
 class ParametrosManager(ManagerGral):
     def crear(self):

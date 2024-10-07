@@ -119,3 +119,12 @@ class ParametroModificacion(BaseModel):
         
 class PagoRealizadoScheme(BaseModel):
     fecha_pago_realizado: datetime.datetime
+    
+class CrearUsuario(BaseModel):
+    nombre: str
+    apellido: str
+    rol: int
+    mail: str
+    contraseña: str
+    tipo_documento_id: int
+    nro_documento: str
