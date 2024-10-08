@@ -196,10 +196,6 @@ def creacion_pago(instancia_db):
                 acum_cuota += precio_cuota
         pagos.crear(Pago(monto=acum_cuota, id_cliente=cliente.id_cliente))
 
-@app.exception_handler(500)
-async def HTTPException_exception_handler(request: Request, exc: HTTPException):
-    logger.info(exc.args)
-    return JSONResponse(content={"estado":"error durante consulta a bbdd"}, status_code=500)
 
 @app.on_event("startup")
 @repeat_every(seconds=60, raise_exceptions = True)  # 24 horas

@@ -43,7 +43,7 @@ class TokenBearer(HTTPBearer):
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            if len(credentials.credentials) < 32:
+            if len(credentials.credentials) <= 32:
                 if not self.verificar_token(credentials.credentials):
                     raise HTTPException(status_code=403, detail="Invalid token or expired token.")
             else:
