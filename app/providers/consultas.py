@@ -1,3 +1,4 @@
+from multimethod import multimethod
 import os
 from abc import ABC, abstractmethod
 import datetime
@@ -196,11 +197,19 @@ class ClientesManager(ManagerGral):
             return cliente_actual
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
 
-    def obtener_uno(self, id_cliente):
-        return self.instancia_db.query(Clientes).filter(Clientes.id_cliente == id_cliente).first()
-
+    def obtener_uno(self):
+        pass
+    
     def obtener_todos(self):
-        return self.instancia_db.query(Clientes).all()
+        pass
+
+    @multimethod
+    def obtener(self, id_cliente: str):
+            return self.instancia_db.query(Clientes).filter(Clientes.id_cliente == id_cliente).first()
+
+    @multimethod
+    def obtener(self):
+            return self.instancia_db.query(Clientes).all()
 
 class UsuariosManager(ManagerGral):
     

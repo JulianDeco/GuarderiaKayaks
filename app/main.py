@@ -8,8 +8,6 @@ from fastapi.templating import Jinja2Templates
 
 from fastapi_utils.tasks import repeat_every
 
-from app.middlewares.middleware import RateLimitingMiddleware
-
 from app.providers.aviso_mail import envio_mail
 
 from app.providers.consultas import PagosManager, ParametrosManager, MailsManager

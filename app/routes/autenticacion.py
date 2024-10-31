@@ -34,16 +34,19 @@ router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/auth/login")
 
+"""
+  "mail": "juli@gmail.com",
+  "contraseña": "123",
+"""
+
 @router.post("/login")
 async def login(credentials: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
-    if credentials.grant_type == 'password':
-        return signJWT(2, 'aplicacion externa')
     consulta = UsuariosManager(db)
-    token = consulta.autenticar_usuario(credentials.username, credentials.password)
+    token = consulta.autenticar_usuario(credentials.email, credentials.password)
     if not token:
-        raise HTTPException(
+        return JSONResponse(
             status_code=401,
-            detail="Usuario o contraseña incorrecta",
+            content={"mensaje": "Usuario o contraseña incorrecta"},
             headers={"WWW-Authenticate": "Bearer"},
         )
     

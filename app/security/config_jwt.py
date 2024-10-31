@@ -25,6 +25,7 @@ def get_db():
     finally: 
         db.close()
 
+ROLES_PERMITIDOS = ['ADMIN']
 class TokenBearer(HTTPBearer):
     def __init__(self, description: Annotated[
             Optional[str],
@@ -40,32 +41,39 @@ class TokenBearer(HTTPBearer):
 
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(TokenBearer, self).__call__(request)
+        metodo_http = request.method
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
             if len(credentials.credentials) <= 32:
-                if not self.verificar_token(credentials.credentials):
+                if not self.verificar_token(credentials.credentials, metodo_http):
                     raise HTTPException(status_code=403, detail="Invalid token or expired token.")
             else:
-                if not self.verify_jwt(credentials.credentials):
+                if not self.verify_jwt(credentials.credentials, metodo_http):
                     raise HTTPException(status_code=403, detail="Invalid token or expired token.")
             return credentials.credentials
         raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
-    def verify_jwt(self, jwtoken: str) -> bool:
+    def verify_jwt(self, jwtoken: str, metodo_http) -> bool:
         isTokenValid: bool = False
 
         try:
             payload = decodeJWT(jwtoken)
-            print(payload)
+            rol_user = payload.get("rol")
+            if rol_user not in ROLES_PERMITIDOS and metodo_http != 'GET':
+                return HTTPException(status_code=401, detail="Usuario no autorizado.")
         except:
             payload = None
         if payload:
             isTokenValid = True
         return isTokenValid
     
-    def verificar_token(self, token):
+    def verificar_token(self, token, metodo_http):
         session_bbdd = next(get_db())
         resultado = session_bbdd.query(Usuario_Token).filter(Usuario_Token.token == token,
                                                  Usuario_Token.expira_en >= str(datetime.datetime.now())).first()
+        if not resultado:
+            False
+        if resultado.token != 1 and metodo_http != 'GET':
+            raise HTTPException(status_code=401, detail="Usuario no autorizado.")
         return resultado
