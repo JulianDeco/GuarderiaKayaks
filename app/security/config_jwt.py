@@ -6,7 +6,7 @@ from typing import Dict, Optional
 from sqlalchemy import Engine
 from typing_extensions import Annotated, Doc
 
-from app.models.models import Base, SessionLocal, Usuario_Token
+from app.models.models import Base, SessionLocal, Usuario_Token, UsuarioSistema
 from app.security.handler_jwt import decodeJWT
 
 
@@ -60,7 +60,7 @@ class TokenBearer(HTTPBearer):
         try:
             payload = decodeJWT(jwtoken)
             rol_user = payload.get("rol")
-            if rol_user not in ROLES_PERMITIDOS and metodo_http != 'GET':
+            if rol_user.upper() not in ROLES_PERMITIDOS and metodo_http != 'GET':
                 return HTTPException(status_code=401, detail="Usuario no autorizado.")
         except:
             payload = None
@@ -74,6 +74,7 @@ class TokenBearer(HTTPBearer):
                                                  Usuario_Token.expira_en >= str(datetime.datetime.now())).first()
         if not resultado:
             False
-        if resultado.token != 1 and metodo_http != 'GET':
+        resultado_usuario = session_bbdd.query(UsuarioSistema).filter(UsuarioSistema.mail == resultado.mail).first()
+        if resultado_usuario.rol_rel.descripcion.upper() not in ROLES_PERMITIDOS and metodo_http != 'GET':
             raise HTTPException(status_code=401, detail="Usuario no autorizado.")
         return resultado
