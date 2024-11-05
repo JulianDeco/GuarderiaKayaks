@@ -1,3 +1,4 @@
+from fastapi.responses import JSONResponse
 from multimethod import multimethod
 import os
 from abc import ABC, abstractmethod
@@ -179,16 +180,17 @@ class ClientesManager(ManagerGral):
         self.commit()
 
     def eliminar(self, id_cliente):
-        cliente = self.obtener_uno(id_cliente)
+        #cliente = self.obtener_uno(id_cliente)
+        cliente = self.obtener(id_cliente)
         if cliente:
             cliente.habilitado = 0
             cliente.fecha_baja = datetime.datetime.now()
             self.commit()
         else:
-            raise HTTPException(status_code=404, detail="Cliente no encontrado")
+            return JSONResponse(status_code=404, content={"mensaje":"Cliente no encontrado"})
 
     def modificar(self, id_cliente, cliente: ClienteModificacion):
-        cliente_actual = self.obtener_uno(id_cliente)
+        cliente_actual = self.obtener(id_cliente)
         if cliente_actual:
             for key, value in cliente.dict(exclude_unset=True).items():
                 setattr(cliente_actual, key, value)

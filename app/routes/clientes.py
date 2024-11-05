@@ -111,7 +111,9 @@ async def baja_cliente(id_cliente: str, db: Session = Depends(get_db)):
         raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     try:
         consulta_cliente = ClientesManager(db)
-        consulta_cliente.eliminar(id_cliente)
+        respuesta = consulta_cliente.eliminar(id_cliente)
+        if respuesta:
+            return respuesta
     except Exception as error:
         logger.exception("Error inesperado")
         raise HTTPException(status_code=500, detail={"estado":"error durante consulta"})
