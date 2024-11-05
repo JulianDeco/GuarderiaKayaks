@@ -57,13 +57,11 @@ class TokenBearer(HTTPBearer):
     def verify_jwt(self, jwtoken: str, metodo_http) -> bool:
         isTokenValid: bool = False
 
-        try:
-            payload = decodeJWT(jwtoken)
-            rol_user = payload.get("rol")
-            if rol_user.upper() not in ROLES_PERMITIDOS and metodo_http != 'GET':
-                return HTTPException(status_code=401, detail="Usuario no autorizado.")
-        except:
-            payload = None
+        payload = decodeJWT(jwtoken)
+        rol_user = payload.get("rol")
+        if rol_user.upper() not in ROLES_PERMITIDOS and metodo_http != 'GET':
+            raise HTTPException(status_code=401, detail="Usuario no autorizado.")
+        payload = None
         if payload:
             isTokenValid = True
         return isTokenValid
