@@ -679,6 +679,17 @@ files = [
 ]
 
 [[package]]
+name = "multimethod"
+version = "1.12"
+description = "Multiple argument dispatching."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "multimethod-1.12-py3-none-any.whl", hash = "sha256:fd0c473c43558908d97cc06e4d68e8f69202f167db46f7b4e4058893e7dbdf60"},
+    {file = "multimethod-1.12.tar.gz", hash = "sha256:8db8ef2a8d2a247e3570cc23317680892fdf903d84c8c1053667c8e8f7671a67"},
+]
+
+[[package]]
 name = "mypy-extensions"
 version = "1.0.0"
 description = "Type system extensions for programs checked with the mypy type checker."
@@ -1671,4 +1682,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "3b49567d67958c5178d4e37fa26aaff819a3a42a628b0b2d8d1369e97e8faf9c"
+content-hash = "6dac65bb38856c917e3f8764184ea246162b87684a89071958207a2c15d16bd6"

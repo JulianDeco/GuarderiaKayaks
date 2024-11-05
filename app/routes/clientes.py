@@ -44,7 +44,7 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
     consulta_cliente = ClientesManager(db)
     if not id:
         try:
-            res = consulta_cliente.obtener_todos()
+            res = consulta_cliente.obtener()
         except Exception as error:
             logger.exception("Error inesperado")
             raise HTTPException(status_code=500, detail={"estado":"error durante consulta"})
@@ -67,7 +67,7 @@ async def listar_clientes(id: Optional[str] = None, db: Session = Depends(get_db
             content=lista_res ,
             status_code= 200
         )
-    res_cliente = consulta_cliente.obtener_uno(id)
+    res_cliente = consulta_cliente.obtener(id)
     return JSONResponse(
         content= {
                 "id": res_cliente.id_cliente,
@@ -111,7 +111,9 @@ async def baja_cliente(id_cliente: str, db: Session = Depends(get_db)):
         raise HTTPException(detail={"estado":"falta parámetro id"}, status_code=400)
     try:
         consulta_cliente = ClientesManager(db)
-        consulta_cliente.eliminar(id_cliente)
+        respuesta = consulta_cliente.eliminar(id_cliente)
+        if respuesta:
+            return respuesta
     except Exception as error:
         logger.exception("Error inesperado")
         raise HTTPException(status_code=500, detail={"estado":"error durante consulta"})
