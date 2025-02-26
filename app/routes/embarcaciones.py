@@ -38,7 +38,7 @@ async def cargar_embarcacion(embarcacion: Embarcacion, db: Session = Depends(get
     except Exception as error:
         logger.exception("Error inesperado")
         raise HTTPException(status_code=500, detail={"estado":"error durante consulta"})
-    return rta
+    return  JSONResponse(content={"embarcacion": "creada"}, status_code=200)
 
 @router.get("/")
 async def listar_embarcacion(id: Optional[str] = None, db: Session = Depends(get_db)) -> JSONResponse:   
